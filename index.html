@@ -12,7 +12,7 @@
 <style>
   :root{
     --bg-deep:#050505; --bg-panel:#131313; --bg-panel-2:#1c1c1c;
-    --paper:#f2f0ec; --stamp-red:#0c0c0c; --stamp-red-bright:#1e1e1e;
+    --paper:#f2f0ec; --stamp-red:#0c0c0c; --stamp-red-bright:#c9645a;
     --gold:#c6c6c2; --line:#333331; --text:#e6e4de; --text-dim:#96938c;
     --mono:'IBM Plex Mono', monospace; --disp:'Aref Ruqaa', serif; --body:'IBM Plex Sans Arabic', sans-serif;
     --green-ok:#7a8f5a;
@@ -70,7 +70,7 @@
   .hero-text{flex:1;min-width:260px;}
   .kicker{display:block;font-family:var(--mono);color:var(--gold);letter-spacing:4px;font-size:12px;margin-bottom:14px;text-transform:uppercase;opacity:.9;}
   h1.title{font-family:var(--disp);font-weight:700;font-size:clamp(48px,8vw,88px);margin:0 0 12px;letter-spacing:0px;color:var(--paper);}
-  .title .accent{color:var(--stamp-red-bright);}
+  .title .accent{color:var(--gold);}
   .subtitle{color:var(--text-dim);font-size:16px;max-width:520px;margin:0 0 26px;}
   .cta-row{display:flex;gap:12px;flex-wrap:wrap;}
   .btn{font-family:var(--mono);font-size:13px;font-weight:600;padding:11px 22px;border-radius:8px;border:1px solid var(--line);transition:all .2s;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.15));color:var(--text);letter-spacing:.5px;box-shadow:0 2px 8px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.03);}
@@ -174,7 +174,7 @@
   .checkbox-row input{width:auto;margin:0;}
   .notice{font-family:var(--mono);font-size:12px;padding:10px 14px;border-radius:6px;margin-bottom:16px;}
   .notice.ok{background:rgba(90,158,111,0.12);border:1px solid var(--green-ok);color:var(--green-ok);}
-  .notice.err{background:rgba(201,72,66,0.12);border:1px solid var(--stamp-red-bright);color:var(--stamp-red-bright);}
+  .notice.err{background:#3a1410;border:2px solid #ff6b5e;color:#ffb3a8;font-weight:700;}
 
   footer{padding:32px 24px;text-align:center;}
   .footer-stamp{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);display:flex;flex-direction:column;gap:6px;align-items:center;}
@@ -875,7 +875,8 @@
       textEl.value = '';
       renderFeed();
     }catch(e){
-      statusEl.innerHTML = '<div class="notice err">صار خطأ، حاول مرة ثانية.</div>';
+      var msg = (e && (e.message || e.details || e.hint)) ? esc(e.message || e.details || e.hint) : 'صار خطأ، حاول مرة ثانية.';
+      statusEl.innerHTML = '<div class="notice err">خطأ: ' + msg + '</div>';
     }
   });
 
