@@ -114,6 +114,26 @@
   .member-role{font-family:var(--mono);font-size:11.5px;color:var(--text-dim);margin-bottom:10px;}
   .member-note{font-size:13px;color:var(--text-dim);margin-bottom:10px;}
   .member-points{font-family:var(--mono);font-size:11px;color:var(--gold);}
+  .level-chip{display:inline-block;font-family:var(--mono);font-size:9.5px;background:var(--bg-panel-2);border:1px solid var(--gold);color:var(--gold);border-radius:10px;padding:1px 7px;margin-inline-start:6px;}
+  .achv-chip{display:inline-block;font-family:var(--body);font-size:11px;margin-top:6px;}
+
+  /* polls */
+  .poll-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin-bottom:16px;}
+  .poll-q{font-weight:600;color:var(--paper);margin-bottom:14px;}
+  .poll-opt{position:relative;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;overflow:hidden;background:var(--bg-deep);}
+  .poll-opt-fill{position:absolute;inset:0;background:rgba(198,198,194,0.10);z-index:0;transition:width .4s ease;}
+  .poll-opt-label{position:relative;z-index:1;display:flex;justify-content:space-between;font-size:13.5px;}
+  .poll-opt.voted{border-color:var(--gold);}
+  .poll-meta{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);margin-top:8px;}
+
+  /* chat */
+  .chat-box{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:16px;height:380px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+  .chat-msg{max-width:82%;padding:8px 12px;border-radius:10px;background:var(--bg-panel-2);border:1px solid var(--line);align-self:flex-start;}
+  .chat-msg .who{font-family:var(--mono);font-size:10px;color:var(--gold);margin-bottom:3px;display:flex;justify-content:space-between;gap:8px;}
+  .chat-msg .txt{font-size:13.5px;word-break:break-word;}
+  .chat-input-row{display:flex;gap:8px;}
+  .chat-input-row input{flex:1;margin-bottom:0;}
+  .chat-input-row button{flex:none;}
   .card-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
 
   .feed-item{border-bottom:1px dashed var(--line);padding:12px 0;font-size:13.5px;}
@@ -195,6 +215,8 @@
     </div>
     <nav class="tabs">
       <a class="tab" href="#opinions">الآراء</a>
+      <a class="tab" href="#polls">تصويتات</a>
+      <a class="tab" href="#chat">دردشة</a>
       <a class="tab" href="#members">الأعضاء</a>
       <a class="tab" href="#leaderboard">الترتيب</a>
       <a class="tab" href="#matches">المباريات</a>
@@ -209,6 +231,8 @@
         <a class="menu-item" href="#members">الأعضاء</a>
         <a class="menu-item" href="#leaderboard">الترتيب</a>
         <a class="menu-item" href="#matches">المباريات</a>
+        <a class="menu-item" href="#polls">التصويتات</a>
+        <a class="menu-item" href="#chat">الدردشة</a>
         <a class="menu-item" href="#opinions">الآراء</a>
         <a class="menu-item" href="#operations">العمليات</a>
       </div>
@@ -309,6 +333,26 @@
   </div>
 </section>
 
+<section id="polls">
+  <div class="container">
+    <p class="eyebrow">صوت القروب</p>
+    <h2>تصويتات CIA</h2>
+    <p class="lead">صوّت على استفتاءات القروب — النتائج تتحدث فوراً. لازم تسجّل دخولك أول عشان تصوّت.</p>
+    <div id="poll-admin-area" style="margin-bottom:20px;"></div>
+    <div id="polls-list"></div>
+  </div>
+</section>
+
+<section id="chat">
+  <div class="container">
+    <p class="eyebrow">دردشة مباشرة</p>
+    <h2>شاتبوكس CIA</h2>
+    <p class="lead">مساحة دردشة للأعضاء — الرسائل تتحدث تلقائياً كل بضع ثوان.</p>
+    <div class="chat-box" id="chat-box"></div>
+    <div id="chat-form-area"></div>
+  </div>
+</section>
+
 <section id="matches">
   <div class="container">
     <p class="eyebrow">سجل المباريات</p>
@@ -354,7 +398,7 @@
   <a href="#hero"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-6h5v6"/></svg></span>بيت</a>
   <a href="#matches"><span class="ic"><svg viewBox="0 0 24 24"><path d="M8 4h8v4a4 4 0 0 1-8 0V4z"/><path d="M5 5H4a2 2 0 0 0 0 4h1"/><path d="M19 5h1a2 2 0 0 1 0 4h-1"/><path d="M9 15h6"/><path d="M12 12v3"/><path d="M7 20h10"/><path d="M9 20v-2.5a3 3 0 0 1 6 0V20"/></svg></span>مباريات</a>
   <a href="#members"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c2.5.3 4.5 2.4 4.5 5"/></svg></span>أعضاء</a>
-  <a href="#opinions"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/></svg></span>آراء</a>
+  <a href="#chat"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/><path d="M8 9h8"/><path d="M8 12.5h5"/></svg></span>دردشة</a>
   <a href="#login"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg></span>المزيد</a>
 </nav>
 
@@ -365,10 +409,19 @@
   var ADMIN_CODE = "CIA-2026"; // كود دخول الإدارة — غيّره لكود خاص فيك
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [] };
+  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [] };
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function initials(name){ var p=(name||'?').trim().split(' '); return p.length>1 ? (p[0][0]+p[1][0]) : (name||'?').slice(0,2); }
+  function levelFromPoints(points){ return Math.max(1, Math.floor((points||0) / 100) + 1); }
+  function achievementFor(wins){
+    wins = wins || 0;
+    if(wins >= 10) return '🥇 أسطورة';
+    if(wins >= 5) return '🥈 محارب';
+    if(wins >= 2) return '🥉 مقاتل';
+    if(wins >= 1) return '⭐ أول انتصار';
+    return '';
+  }
   function rand(min, max){ return Math.random() * (max - min) + min; }
 
   // ---------- lightweight local session (per browser, not shared) ----------
@@ -414,6 +467,24 @@
     }catch(e){ console.error('matches load failed', e); state.matches = []; }
 
     try{
+      var { data: polls, error: pollErr } = await sb.from('polls').select('*').order('created_at', { ascending: false });
+      if(pollErr) throw pollErr;
+      state.polls = polls || [];
+    }catch(e){ console.error('polls load failed', e); state.polls = []; }
+
+    try{
+      var { data: pv, error: pvErr } = await sb.from('poll_votes').select('*');
+      if(pvErr) throw pvErr;
+      state.pollVotes = pv || [];
+    }catch(e){ console.error('poll_votes load failed', e); state.pollVotes = []; }
+
+    try{
+      var { data: chat, error: chatErr } = await sb.from('chat_messages').select('*').order('created_at', { ascending: true }).limit(80);
+      if(chatErr) throw chatErr;
+      state.chatMessages = chat || [];
+    }catch(e){ console.error('chat load failed', e); state.chatMessages = []; }
+
+    try{
       var { data: v, error: vErr } = await sb.from('visits').select('count').eq('id', 1).single();
       if(vErr) throw vErr;
       var newCount = (v && v.count ? v.count : 0) + 1;
@@ -422,6 +493,7 @@
     }catch(e){ console.error('visits update failed', e); state.visits = '—'; }
 
     renderAll();
+    setInterval(refreshChat, 6000);
   }
 
   function renderAll(){
@@ -431,6 +503,8 @@
     renderJoinArea();
     renderLeaderboard();
     renderMatches();
+    renderPolls();
+    renderChat();
     renderFeed();
     document.getElementById('visit-count').textContent = state.visits;
     document.getElementById('member-count').textContent = state.members.length;
@@ -511,10 +585,11 @@
       }
       card.innerHTML =
         '<div class="avatar">' + esc(initials(m.name)) + '</div>' +
-        '<div class="member-name">' + esc(m.name) + (m.eliminated ? ' <span class="badge out">مُقصى</span>' : '') + '</div>' +
+        '<div class="member-name">' + esc(m.name) + ' <span class="level-chip">Lv.' + levelFromPoints(m.points) + '</span>' + (m.eliminated ? ' <span class="badge out">مُقصى</span>' : '') + '</div>' +
         '<div class="member-role">' + esc(m.role) + '</div>' +
         '<div class="member-note">' + esc(m.note) + '</div>' +
-        '<div class="member-points">النقاط: ' + (m.points||0) + ' · فوز ' + (m.wins||0) + ' / خسارة ' + (m.losses||0) + '</div>' + actions;
+        '<div class="member-points">النقاط: ' + (m.points||0) + ' · فوز ' + (m.wins||0) + ' / خسارة ' + (m.losses||0) + '</div>' +
+        (achievementFor(m.wins) ? '<div class="achv-chip">' + achievementFor(m.wins) + '</div>' : '') + actions;
       grid.appendChild(card);
     });
 
@@ -648,15 +723,15 @@
   function renderLeaderboard(){
     var table = document.getElementById('rank-table');
     var sorted = state.members.slice().sort(function(a,b){ return (b.points||0)-(a.points||0); });
-    var rows = '<tr><th>#</th><th>الاسم</th><th>النقاط</th>' + (state.session && state.session.isAdmin ? '<th>تعديل</th>' : '') + '</tr>';
+    var rows = '<tr><th>#</th><th>الاسم</th><th>المستوى</th><th>النقاط</th>' + (state.session && state.session.isAdmin ? '<th>تعديل</th>' : '') + '</tr>';
     sorted.forEach(function(m, i){
-      rows += '<tr><td class="rank-pos">' + (i+1) + '</td><td>' + esc(m.name) + '</td><td>' + (m.points||0) + '</td>' +
+      rows += '<tr><td class="rank-pos">' + (i+1) + '</td><td>' + esc(m.name) + '</td><td><span class="level-chip">Lv.' + levelFromPoints(m.points) + '</span></td><td>' + (m.points||0) + '</td>' +
         (state.session && state.session.isAdmin ?
           '<td><button class="btn small ghost" data-pact="plus" data-pid="' + m.id + '">+10</button> ' +
           '<button class="btn small ghost" data-pact="minus" data-pid="' + m.id + '">-10</button></td>' : '') +
         '</tr>';
     });
-    if(sorted.length === 0) rows += '<tr><td colspan="4" class="empty-note">لا يوجد أعضاء بعد.</td></tr>';
+    if(sorted.length === 0) rows += '<tr><td colspan="5" class="empty-note">لا يوجد أعضاء بعد.</td></tr>';
     table.innerHTML = rows;
     table.querySelectorAll('[data-pact]').forEach(function(b){
       b.onclick = async function(){
@@ -798,6 +873,144 @@
     }catch(e){
       statusEl.innerHTML = '<div class="notice err">صار خطأ، حاول مرة ثانية.</div>';
     }
+  }
+
+  // ---------- polls ----------
+  function renderPolls(){
+    var adminArea = document.getElementById('poll-admin-area');
+    if(state.session && state.session.isAdmin){
+      adminArea.innerHTML = '<button class="btn primary" id="new-poll-btn">+ إنشاء تصويت جديد</button>';
+      document.getElementById('new-poll-btn').onclick = async function(){
+        var q = prompt('سؤال التصويت');
+        if(!q) return;
+        var opts = [];
+        for(var i=1;i<=4;i++){
+          var o = prompt('خيار رقم ' + i + ' (اتركه فاضي لو خلصت)');
+          if(!o) break;
+          opts.push(o);
+        }
+        if(opts.length < 2){ alert('لازم خيارين على الأقل.'); return; }
+        try{
+          var { data, error } = await sb.from('polls').insert({ question: q, options: opts }).select().single();
+          if(error) throw error;
+          state.polls.unshift(data);
+          renderAll();
+        }catch(e){ alert('صار خطأ بإنشاء التصويت'); }
+      };
+    } else {
+      adminArea.innerHTML = '';
+    }
+
+    var list = document.getElementById('polls-list');
+    if(state.polls.length === 0){
+      list.innerHTML = '<div class="feed-empty">ما فيه تصويتات حالياً.</div>';
+      return;
+    }
+    list.innerHTML = state.polls.map(function(p){
+      var votesForPoll = state.pollVotes.filter(function(v){ return v.poll_id === p.id; });
+      var total = votesForPoll.length;
+      var myVote = state.session ? votesForPoll.find(function(v){ return v.voter_name === state.session.name; }) : null;
+      var opts = p.options.map(function(optLabel, idx){
+        var count = votesForPoll.filter(function(v){ return v.option_index === idx; }).length;
+        var pct = total > 0 ? Math.round((count/total)*100) : 0;
+        var votedCls = myVote && myVote.option_index === idx ? ' voted' : '';
+        return '<div class="poll-opt' + votedCls + '" data-poll="' + p.id + '" data-opt="' + idx + '">' +
+          '<div class="poll-opt-fill" style="width:' + pct + '%;"></div>' +
+          '<div class="poll-opt-label"><span>' + esc(optLabel) + (myVote && myVote.option_index === idx ? ' ✓' : '') + '</span><span>' + pct + '% (' + count + ')</span></div>' +
+        '</div>';
+      }).join('');
+      var delBtn = (state.session && state.session.isAdmin) ? '<button class="btn small ghost" data-delpoll="' + p.id + '" style="margin-top:8px;">حذف التصويت</button>' : '';
+      return '<div class="poll-card"><div class="poll-q">' + esc(p.question) + '</div>' + opts +
+        '<div class="poll-meta">' + total + ' صوت</div>' + delBtn + '</div>';
+    }).join('');
+
+    list.querySelectorAll('.poll-opt').forEach(function(el){
+      el.onclick = async function(){
+        if(!state.session){ alert('سجّل دخولك أول عشان تصوّت.'); return; }
+        var pollId = el.getAttribute('data-poll');
+        var optIdx = Number(el.getAttribute('data-opt'));
+        var existing = state.pollVotes.find(function(v){ return v.poll_id === pollId && v.voter_name === state.session.name; });
+        try{
+          if(existing){
+            await sb.from('poll_votes').update({ option_index: optIdx }).eq('id', existing.id);
+            existing.option_index = optIdx;
+          } else {
+            var { data, error } = await sb.from('poll_votes').insert({ poll_id: pollId, voter_name: state.session.name, option_index: optIdx }).select().single();
+            if(error) throw error;
+            state.pollVotes.push(data);
+          }
+          renderPolls();
+        }catch(e){ alert('صار خطأ بالتصويت'); }
+      };
+    });
+    list.querySelectorAll('[data-delpoll]').forEach(function(b){
+      b.onclick = async function(){
+        var id = b.getAttribute('data-delpoll');
+        try{
+          await sb.from('polls').delete().eq('id', id);
+          state.polls = state.polls.filter(function(p){ return p.id !== id; });
+          state.pollVotes = state.pollVotes.filter(function(v){ return v.poll_id !== id; });
+          renderPolls();
+        }catch(e){ alert('صار خطأ بالحذف'); }
+      };
+    });
+  }
+
+  // ---------- chat ----------
+  function renderChat(){
+    var box = document.getElementById('chat-box');
+    var wasNearBottom = (box.scrollTop + box.clientHeight) >= (box.scrollHeight - 40);
+    if(state.chatMessages.length === 0){
+      box.innerHTML = '<div class="feed-empty">لا توجد رسائل بعد. كن أول من يكتب.</div>';
+    } else {
+      box.innerHTML = state.chatMessages.map(function(m){
+        var delBtn = (state.session && state.session.isAdmin) ? ' <button class="del-op" data-delchat="' + m.id + '">حذف</button>' : '';
+        return '<div class="chat-msg"><div class="who"><span>' + esc(m.name) + '</span>' + delBtn + '</div><div class="txt">' + esc(m.message) + '</div></div>';
+      }).join('');
+      box.querySelectorAll('[data-delchat]').forEach(function(b){
+        b.onclick = async function(e){
+          e.stopPropagation();
+          var id = b.getAttribute('data-delchat');
+          try{
+            await sb.from('chat_messages').delete().eq('id', id);
+            state.chatMessages = state.chatMessages.filter(function(m){ return m.id !== id; });
+            renderChat();
+          }catch(e){ alert('صار خطأ بالحذف'); }
+        };
+      });
+    }
+    if(wasNearBottom) box.scrollTop = box.scrollHeight;
+
+    var formArea = document.getElementById('chat-form-area');
+    if(state.session){
+      formArea.innerHTML = '<div class="chat-input-row"><input type="text" id="chat-input" placeholder="اكتب رسالتك..."><button class="btn primary" id="chat-send-btn">إرسال</button></div>';
+      var sendFn = async function(){
+        var input = document.getElementById('chat-input');
+        var msg = input.value.trim();
+        if(!msg) return;
+        try{
+          var { data, error } = await sb.from('chat_messages').insert({ name: state.session.name, message: msg }).select().single();
+          if(error) throw error;
+          state.chatMessages.push(data);
+          if(state.chatMessages.length > 80) state.chatMessages = state.chatMessages.slice(-80);
+          input.value = '';
+          renderChat();
+        }catch(e){ alert('صار خطأ بإرسال الرسالة'); }
+      };
+      document.getElementById('chat-send-btn').onclick = sendFn;
+      document.getElementById('chat-input').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ sendFn(); } });
+    } else {
+      formArea.innerHTML = '<p class="lead" style="margin:0;">سجّل دخولك من قسم "الحساب" عشان تشارك بالدردشة.</p>';
+    }
+  }
+
+  async function refreshChat(){
+    try{
+      var { data: chat, error } = await sb.from('chat_messages').select('*').order('created_at', { ascending: true }).limit(80);
+      if(error) throw error;
+      state.chatMessages = chat || [];
+      renderChat();
+    }catch(e){ /* silent - keep last known messages */ }
   }
 
   // ---------- opinions: floating bubbles ----------
