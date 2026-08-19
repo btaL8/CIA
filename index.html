@@ -746,7 +746,10 @@
           state.session = { name: acc.username, accountId: acc.id, avatar: acc.avatar, rank: acc.rank, coins: acc.coins, isAdmin: acc.rank === 'إدارة' };
           saveSession(state.session);
           renderAll();
-        }catch(e){ statusEl.innerHTML = '<div class="notice err">صار خطأ، حاول مرة ثانية.</div>'; }
+        }catch(e){
+          var msg = (e && (e.message || e.details || e.hint)) ? String(e.message || e.details || e.hint) : 'صار خطأ، حاول مرة ثانية.';
+          statusEl.innerHTML = '<div class="notice err">خطأ: ' + msg.replace(/</g,'&lt;') + '</div>';
+        }
       };
     } else {
       area.innerHTML =
@@ -782,7 +785,10 @@
           state.session = { name: data.username, accountId: data.id, avatar: data.avatar, rank: data.rank, coins: data.coins, isAdmin: false };
           saveSession(state.session);
           renderAll();
-        }catch(e){ statusEl.innerHTML = '<div class="notice err">صار خطأ، حاول مرة ثانية.</div>'; }
+        }catch(e){
+          var msg = (e && (e.message || e.details || e.hint)) ? String(e.message || e.details || e.hint) : 'صار خطأ، حاول مرة ثانية.';
+          statusEl.innerHTML = '<div class="notice err">خطأ: ' + msg.replace(/</g,'&lt;') + '</div>';
+        }
       };
     }
   }
