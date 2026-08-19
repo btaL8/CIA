@@ -57,12 +57,46 @@
   .menu-session{padding:8px 10px;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
   .menu-session b{color:var(--paper);}
   .menu-session button{display:block;width:100%;text-align:right;margin-top:6px;background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:11.5px;padding:6px 0;cursor:pointer;}
+
+  /* auth tabs */
+  .auth-tabs{display:flex;gap:8px;margin-bottom:18px;}
+  .auth-tab-btn{flex:1;padding:9px;border-radius:8px;border:1px solid var(--line);background:var(--bg-deep);color:var(--text-dim);font-family:var(--mono);font-size:12.5px;cursor:pointer;}
+  .auth-tab-btn.active{border-color:var(--gold);color:var(--gold);background:var(--bg-panel-2);}
+
+  /* profile card */
+  .profile-card{display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+  .profile-avatar{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);flex:none;background:var(--bg-panel-2);}
+  .profile-avatar-fallback{width:72px;height:72px;border-radius:50%;border:2px solid var(--gold);flex:none;background:var(--bg-panel-2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:22px;color:var(--gold);}
+  .profile-info{flex:1;min-width:180px;}
+  .profile-name{font-weight:700;color:var(--paper);font-size:17px;margin-bottom:4px;}
+  .rank-chip{display:inline-block;font-family:var(--mono);font-size:10.5px;background:var(--bg-panel-2);border:1px solid var(--gold);color:var(--gold);border-radius:10px;padding:2px 9px;margin-inline-end:6px;}
+  .coins-chip{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--paper);}
+  .avatar-upload-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+  .avatar-preview{width:60px;height:60px;border-radius:50%;object-fit:cover;border:1px solid var(--line);background:var(--bg-panel-2);flex:none;}
+
+  /* store */
+  .store-item-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+  .store-item-name{font-weight:600;color:var(--paper);margin-bottom:3px;}
+  .store-item-desc{font-size:12.5px;color:var(--text-dim);}
+  .store-item-cost{font-family:var(--mono);color:var(--gold);font-size:13px;white-space:nowrap;}
+  .purchase-row{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px dashed var(--line);padding:10px 0;font-size:13px;flex-wrap:wrap;}
+  .purchase-row:last-child{border-bottom:none;}
+  .status-chip{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--text-dim);}
   .session-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green-ok);}
   .session-pill button{background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:11px;}
 
   .hero{position:relative;padding:80px 24px 60px;border-bottom:1px solid var(--line);overflow:hidden;}
   .hero .container{position:relative;z-index:2;}
-  .hero-bubbles{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+  .bubbles-panel{margin-top:32px;position:relative;padding:14px;border:1px solid var(--line);border-radius:10px;
+    background:linear-gradient(135deg, rgba(198,198,194,0.05), rgba(0,0,0,0.25));}
+  .bubbles-panel::before, .bubbles-panel::after,
+  .bubbles-panel .bp-corner-tr, .bubbles-panel .bp-corner-bl{content:"";position:absolute;width:14px;height:14px;border-color:var(--gold);opacity:.75;}
+  .bubbles-panel::before{top:-1px;left:-1px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);}
+  .bubbles-panel::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);}
+  .bubbles-panel .bp-corner-tr{top:-1px;right:-1px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);}
+  .bubbles-panel .bp-corner-bl{bottom:-1px;left:-1px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);}
+  .bubbles-panel-label{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;text-align:center;opacity:.85;}
+  .hero-bubbles{position:relative;height:200px;overflow:hidden;border-radius:6px;}
   .file-meta{font-family:var(--mono);font-size:12px;color:var(--text-dim);display:flex;gap:18px;flex-wrap:wrap;margin-bottom:26px;}
   .file-meta b{color:var(--gold);font-weight:600;}
   .hero-grid{display:flex;gap:44px;align-items:center;flex-wrap:wrap;}
@@ -151,9 +185,9 @@
     border:1px solid var(--line);
   }
   .bubble{
-    position:absolute;max-width:190px;min-width:120px;padding:10px 14px;border-radius:16px;
-    background:var(--bg-panel-2);border:1px solid var(--line);font-size:12.5px;line-height:1.5;
-    box-shadow:0 8px 24px -12px rgba(0,0,0,.6);
+    position:absolute;max-width:150px;min-width:100px;padding:6px 10px;border-radius:12px;
+    background:var(--bg-panel-2);border:1px solid var(--line);font-size:10.5px;line-height:1.4;
+    box-shadow:0 6px 18px -10px rgba(0,0,0,.6);
     animation-name:floaty;animation-timing-function:ease-in-out;animation-iteration-count:infinite;animation-direction:alternate;
     cursor:default;transition:border-color .2s, opacity .2s;
     pointer-events:auto;opacity:.88;
@@ -221,6 +255,7 @@
       <a class="tab" href="#leaderboard">الترتيب</a>
       <a class="tab" href="#matches">المباريات</a>
       <a class="tab" href="#operations">العمليات</a>
+      <a class="tab" href="#store">المتجر</a>
       <a class="tab" href="#login">الحساب</a>
     </nav>
     <div class="menu-wrap" id="menu-wrap">
@@ -235,6 +270,7 @@
         <a class="menu-item" href="#chat">الدردشة</a>
         <a class="menu-item" href="#opinions">الآراء</a>
         <a class="menu-item" href="#operations">العمليات</a>
+        <a class="menu-item" href="#store">المتجر</a>
       </div>
     </div>
   </div>
@@ -261,7 +297,12 @@
       </div>
     </div>
   </div>
-  <div class="hero-bubbles" id="feed"></div>
+  <div class="bubbles-panel">
+    <div class="bp-corner-tr"></div>
+    <div class="bp-corner-bl"></div>
+    <div class="bubbles-panel-label">CHATTER FEED — آراء الأعضاء</div>
+    <div class="hero-bubbles" id="feed"></div>
+  </div>
 </section>
 
 <section id="about">
@@ -285,8 +326,21 @@
   <div class="container">
     <p class="eyebrow">الهوية</p>
     <h2>حسابك</h2>
-    <p class="lead">سجّل باسمك عشان تنربط آراؤك باسمك، أو ادخل كإدارة لإدارة الأعضاء والترتيب. هذا نظام هوية بسيط مبني على المتصفح — مو تسجيل دخول مشفّر بسيرفر حقيقي.</p>
+    <p class="lead">سوّي حساب حقيقي بيوزر وباسورد وصورة شخصية، وانضم كعضو بالموقع. ملاحظة: هذا نظام حسابات خفيف مبني على المتصفح — مو تشفير بنكي، بس كافي لقروب لعبة بين أصدقاء.</p>
     <div id="login-area" class="panel"></div>
+    <div id="accounts-admin-area" style="margin-top:20px;"></div>
+  </div>
+</section>
+
+<section id="store">
+  <div class="container">
+    <p class="eyebrow">متجر CIA</p>
+    <h2>المتجر</h2>
+    <p class="lead">استبدل عملاتك بمكافآت من متجر القروب.</p>
+    <div id="store-coins-area" style="margin-bottom:18px;"></div>
+    <div id="store-admin-area" style="margin-bottom:20px;"></div>
+    <div id="store-items-area"></div>
+    <div id="store-purchases-admin-area" style="margin-top:24px;"></div>
   </div>
 </section>
 
@@ -296,6 +350,7 @@
     <h2>أعضاء CIA</h2>
     <p class="lead">قائمة الأعضاء الرسمية — محفوظة فعلياً وتظهر لكل زائر. أي تعديل من الإدارة يظهر مباشرة للجميع.</p>
     <div id="members-notice"></div>
+
     <div class="grid-members" id="members-grid"></div>
     <div id="join-area" style="margin-top:24px;"></div>
   </div>
@@ -409,7 +464,7 @@
   var ADMIN_CODE = "CIA-2026"; // كود دخول الإدارة — غيّره لكود خاص فيك
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [] };
+  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [] };
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function initials(name){ var p=(name||'?').trim().split(' '); return p.length>1 ? (p[0][0]+p[1][0]) : (name||'?').slice(0,2); }
@@ -485,6 +540,36 @@
     }catch(e){ console.error('chat load failed', e); state.chatMessages = []; }
 
     try{
+      var { data: accounts, error: accErr } = await sb.from('accounts').select('*').order('created_at', { ascending: true });
+      if(accErr) throw accErr;
+      state.accounts = accounts || [];
+    }catch(e){ console.error('accounts load failed', e); state.accounts = []; }
+
+    try{
+      var { data: items, error: itemErr } = await sb.from('store_items').select('*').order('created_at', { ascending: true });
+      if(itemErr) throw itemErr;
+      state.storeItems = items || [];
+    }catch(e){ console.error('store_items load failed', e); state.storeItems = []; }
+
+    try{
+      var { data: purchases, error: purErr } = await sb.from('purchases').select('*').order('created_at', { ascending: false });
+      if(purErr) throw purErr;
+      state.purchases = purchases || [];
+    }catch(e){ console.error('purchases load failed', e); state.purchases = []; }
+
+    // refresh session with latest account data (rank/coins/avatar might have changed)
+    if(state.session && state.session.accountId){
+      var freshAcc = state.accounts.find(function(a){ return a.id === state.session.accountId; });
+      if(freshAcc){
+        state.session.rank = freshAcc.rank;
+        state.session.coins = freshAcc.coins;
+        state.session.avatar = freshAcc.avatar;
+        state.session.isAdmin = freshAcc.rank === 'إدارة';
+        saveSession(state.session);
+      }
+    }
+
+    try{
       var { data: v, error: vErr } = await sb.from('visits').select('count').eq('id', 1).single();
       if(vErr) throw vErr;
       var newCount = (v && v.count ? v.count : 0) + 1;
@@ -505,6 +590,7 @@
     renderMatches();
     renderPolls();
     renderChat();
+    renderStore();
     renderFeed();
     document.getElementById('visit-count').textContent = state.visits;
     document.getElementById('member-count').textContent = state.members.length;
@@ -543,30 +629,310 @@
   })();
 
   // ---------- login ----------
+  function resizeImageFile(file, size){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(e){
+        var img = new Image();
+        img.onload = function(){
+          var canvas = document.createElement('canvas');
+          canvas.width = size; canvas.height = size;
+          var ctx = canvas.getContext('2d');
+          var side = Math.min(img.width, img.height);
+          var sx = (img.width - side) / 2, sy = (img.height - side) / 2;
+          ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+          resolve(canvas.toDataURL('image/jpeg', 0.72));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
   function renderLogin(){
     var el = document.getElementById('login-area');
+    var adminPanelEl = document.getElementById('accounts-admin-area');
+
     if(state.session){
-      el.innerHTML = '<p style="margin:0 0 8px;">أهلاً <b style="color:var(--paper)">' + esc(state.session.name) + '</b>، أنت مسجل دخول ' +
-        (state.session.isAdmin ? 'بصلاحية <span class="badge">إدارة</span>.' : 'كزائر/عضو.') + '</p>' +
-        '<p class="lead" style="margin-bottom:0;">آراؤك الجديدة بتُنسب لاسمك تلقائياً' + (state.session.isAdmin ? '، وتقدر تدير الأعضاء والترتيب من أقسام الأعضاء والترتيب بالأسفل.' : '.') + '</p>';
-      return;
+      var avatarHtml = state.session.avatar
+        ? '<img class="profile-avatar" src="' + state.session.avatar + '">'
+        : '<div class="profile-avatar-fallback">' + esc(initials(state.session.name)) + '</div>';
+      el.innerHTML =
+        '<div class="profile-card">' + avatarHtml +
+          '<div class="profile-info">' +
+            '<div class="profile-name">' + esc(state.session.name) + '</div>' +
+            '<span class="rank-chip">' + esc(state.session.rank || (state.session.isAdmin ? 'إدارة' : 'زائر')) + '</span>' +
+            (state.session.accountId ? '<span class="coins-chip">🪙 ' + (state.session.coins||0) + ' عملة</span>' : '') +
+          '</div>' +
+          '<button class="btn small ghost" id="logout-btn2">تسجيل خروج</button>' +
+        '</div>' +
+        (state.session.accountId ? '<div style="margin-top:16px;"><label for="avatar-change">تغيير الصورة الشخصية</label><input type="file" id="avatar-change" accept="image/*"></div><div id="avatar-change-status"></div>' : '') +
+        '<p class="lead" style="margin:16px 0 0;">آراؤك ورسائلك بتُنسب لاسمك تلقائياً' + (state.session.isAdmin ? '، وتقدر تدير الموقع كامل من أقسامه المختلفة.' : '.') + '</p>';
+
+      document.getElementById('logout-btn2').onclick = function(){
+        state.session = null;
+        saveSession(null);
+        renderAll();
+      };
+      var avatarInput = document.getElementById('avatar-change');
+      if(avatarInput){
+        avatarInput.onchange = async function(){
+          if(!avatarInput.files[0]) return;
+          try{
+            var dataUrl = await resizeImageFile(avatarInput.files[0], 160);
+            await sb.from('accounts').update({ avatar: dataUrl }).eq('id', state.session.accountId);
+            state.session.avatar = dataUrl;
+            saveSession(state.session);
+            var acc = state.accounts.find(function(a){ return a.id === state.session.accountId; });
+            if(acc) acc.avatar = dataUrl;
+            renderAll();
+          }catch(e){ document.getElementById('avatar-change-status').innerHTML = '<div class="notice err">صار خطأ برفع الصورة.</div>'; }
+        };
+      }
+    } else {
+      el.innerHTML =
+        '<div class="auth-tabs"><button class="auth-tab-btn active" id="tab-login-btn">تسجيل الدخول</button><button class="auth-tab-btn" id="tab-signup-btn">إنشاء حساب</button></div>' +
+        '<div id="auth-form-area"></div>' +
+        '<div style="margin-top:16px;"><a href="#" id="admin-quick-link" style="font-family:var(--mono);font-size:11px;color:var(--text-dim);">دخول كإدارة بدون حساب</a></div>';
+      renderAuthForm('login');
+      document.getElementById('tab-login-btn').onclick = function(){
+        document.getElementById('tab-login-btn').classList.add('active');
+        document.getElementById('tab-signup-btn').classList.remove('active');
+        renderAuthForm('login');
+      };
+      document.getElementById('tab-signup-btn').onclick = function(){
+        document.getElementById('tab-signup-btn').classList.add('active');
+        document.getElementById('tab-login-btn').classList.remove('active');
+        renderAuthForm('signup');
+      };
+      document.getElementById('admin-quick-link').onclick = function(e){
+        e.preventDefault();
+        var code = prompt('كود الإدارة');
+        if(!code) return;
+        if(code !== ADMIN_CODE){ alert('كود غير صحيح.'); return; }
+        var name = prompt('اسمك (يظهر بالآراء والدردشة)', 'الإدارة');
+        if(!name) return;
+        state.session = { name: name, isAdmin: true, accountId: null, rank: 'إدارة', coins: 0 };
+        saveSession(state.session);
+        renderAll();
+      };
     }
-    el.innerHTML =
-      '<label for="login-name">اسمك</label><input type="text" id="login-name" placeholder="اكتب اسمك">' +
-      '<label for="login-admin">كود الإدارة (اختياري — اتركه فاضي إذا مو إدارة)</label><input type="password" id="login-admin" placeholder="••••••">' +
-      '<button class="btn primary" id="login-btn">دخول</button>' +
-      '<div id="login-status"></div>';
-    document.getElementById('login-btn').onclick = function(){
-      var name = document.getElementById('login-name').value.trim();
-      var code = document.getElementById('login-admin').value.trim();
-      var statusEl = document.getElementById('login-status');
-      if(!name){ statusEl.innerHTML = '<div class="notice err">لازم تكتب اسمك.</div>'; return; }
-      var isAdmin = code.length > 0 && code === ADMIN_CODE;
-      if(code.length > 0 && !isAdmin){ statusEl.innerHTML = '<div class="notice err">كود الإدارة غير صحيح.</div>'; return; }
-      state.session = { name: name, isAdmin: isAdmin };
-      saveSession(state.session);
-      renderAll();
-    };
+
+    renderAccountsAdmin();
+  }
+
+  function renderAuthForm(mode){
+    var area = document.getElementById('auth-form-area');
+    if(mode === 'login'){
+      area.innerHTML =
+        '<label for="li-user">اسم المستخدم</label><input type="text" id="li-user" placeholder="username">' +
+        '<label for="li-pass">كلمة المرور</label><input type="password" id="li-pass" placeholder="••••••">' +
+        '<button class="btn primary" id="li-btn">دخول</button><div id="auth-status"></div>';
+      document.getElementById('li-btn').onclick = async function(){
+        var u = document.getElementById('li-user').value.trim();
+        var p = document.getElementById('li-pass').value;
+        var statusEl = document.getElementById('auth-status');
+        if(!u || !p){ statusEl.innerHTML = '<div class="notice err">عبّي اسم المستخدم وكلمة المرور.</div>'; return; }
+        try{
+          var { data, error } = await sb.from('accounts').select('*').eq('username', u).limit(1);
+          if(error) throw error;
+          if(!data || !data.length || data[0].password !== p){
+            statusEl.innerHTML = '<div class="notice err">اسم المستخدم أو كلمة المرور غلط.</div>';
+            return;
+          }
+          var acc = data[0];
+          state.session = { name: acc.username, accountId: acc.id, avatar: acc.avatar, rank: acc.rank, coins: acc.coins, isAdmin: acc.rank === 'إدارة' };
+          saveSession(state.session);
+          renderAll();
+        }catch(e){ statusEl.innerHTML = '<div class="notice err">صار خطأ، حاول مرة ثانية.</div>'; }
+      };
+    } else {
+      area.innerHTML =
+        '<label for="su-user">اسم المستخدم</label><input type="text" id="su-user" placeholder="username">' +
+        '<label for="su-pass">كلمة المرور</label><input type="password" id="su-pass" placeholder="••••••">' +
+        '<label for="su-pass2">تأكيد كلمة المرور</label><input type="password" id="su-pass2" placeholder="••••••">' +
+        '<label for="su-avatar">صورة شخصية (اختياري)</label>' +
+        '<div class="avatar-upload-row"><img class="avatar-preview" id="su-avatar-preview" src=""><input type="file" id="su-avatar" accept="image/*" style="flex:1;"></div>' +
+        '<button class="btn primary" id="su-btn">إنشاء الحساب</button><div id="auth-status"></div>';
+      var previewImg = document.getElementById('su-avatar-preview');
+      previewImg.style.display = 'none';
+      var pendingAvatar = null;
+      document.getElementById('su-avatar').onchange = async function(e){
+        if(!e.target.files[0]) return;
+        pendingAvatar = await resizeImageFile(e.target.files[0], 160);
+        previewImg.src = pendingAvatar;
+        previewImg.style.display = 'block';
+      };
+      document.getElementById('su-btn').onclick = async function(){
+        var u = document.getElementById('su-user').value.trim();
+        var p = document.getElementById('su-pass').value;
+        var p2 = document.getElementById('su-pass2').value;
+        var statusEl = document.getElementById('auth-status');
+        if(!u || u.length < 3){ statusEl.innerHTML = '<div class="notice err">اسم المستخدم لازم يكون 3 أحرف على الأقل.</div>'; return; }
+        if(!p || p.length < 4){ statusEl.innerHTML = '<div class="notice err">كلمة المرور لازم تكون 4 أحرف على الأقل.</div>'; return; }
+        if(p !== p2){ statusEl.innerHTML = '<div class="notice err">كلمتا المرور غير متطابقتين.</div>'; return; }
+        try{
+          var { data: existing } = await sb.from('accounts').select('id').eq('username', u).limit(1);
+          if(existing && existing.length){ statusEl.innerHTML = '<div class="notice err">اسم المستخدم مستخدم من قبل.</div>'; return; }
+          var { data, error } = await sb.from('accounts').insert({ username: u, password: p, avatar: pendingAvatar, rank: 'عضو جديد', coins: 0 }).select().single();
+          if(error) throw error;
+          state.accounts.push(data);
+          state.session = { name: data.username, accountId: data.id, avatar: data.avatar, rank: data.rank, coins: data.coins, isAdmin: false };
+          saveSession(state.session);
+          renderAll();
+        }catch(e){ statusEl.innerHTML = '<div class="notice err">صار خطأ، حاول مرة ثانية.</div>'; }
+      };
+    }
+  }
+
+  function renderAccountsAdmin(){
+    var el = document.getElementById('accounts-admin-area');
+    if(!el) return;
+    if(!state.session || !state.session.isAdmin){ el.innerHTML = ''; return; }
+    var ranks = ['عضو جديد','عضو','مساعد','قائد','إدارة'];
+    el.innerHTML = '<div class="panel"><label style="margin-bottom:12px;">إدارة الحسابات (' + state.accounts.length + ')</label>' +
+      state.accounts.map(function(a){
+        var av = a.avatar ? '<img class="avatar-preview" src="' + a.avatar + '" style="width:36px;height:36px;">' : '<div class="avatar-preview" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--gold);">' + esc(initials(a.username)) + '</div>';
+        return '<div class="purchase-row">' +
+          '<div style="display:flex;align-items:center;gap:10px;">' + av + '<div><b style="color:var(--paper);">' + esc(a.username) + '</b><br><span class="rank-chip">' + esc(a.rank) + '</span> <span class="coins-chip">🪙 ' + (a.coins||0) + '</span></div></div>' +
+          '<div class="card-actions">' +
+            '<button class="btn small ghost" data-setrank="' + a.id + '">تغيير الرتبة</button>' +
+            '<button class="btn small ghost" data-addcoin="' + a.id + '">+10 عملة</button>' +
+            '<button class="btn small ghost" data-subcoin="' + a.id + '">-10 عملة</button>' +
+          '</div></div>';
+      }).join('') + '</div>';
+
+    el.querySelectorAll('[data-setrank]').forEach(function(b){
+      b.onclick = async function(){
+        var id = b.getAttribute('data-setrank');
+        var acc = state.accounts.find(function(a){ return a.id === id; });
+        var newRank = prompt('اختر رتبة: ' + ranks.join(' / '), acc ? acc.rank : 'عضو');
+        if(!newRank) return;
+        try{
+          await sb.from('accounts').update({ rank: newRank }).eq('id', id);
+          if(acc) acc.rank = newRank;
+          renderAll();
+        }catch(e){ alert('صار خطأ'); }
+      };
+    });
+    el.querySelectorAll('[data-addcoin]').forEach(function(b){
+      b.onclick = async function(){
+        var id = b.getAttribute('data-addcoin');
+        var acc = state.accounts.find(function(a){ return a.id === id; });
+        var newCoins = (acc.coins||0) + 10;
+        try{ await sb.from('accounts').update({ coins: newCoins }).eq('id', id); acc.coins = newCoins; renderAll(); }catch(e){ alert('صار خطأ'); }
+      };
+    });
+    el.querySelectorAll('[data-subcoin]').forEach(function(b){
+      b.onclick = async function(){
+        var id = b.getAttribute('data-subcoin');
+        var acc = state.accounts.find(function(a){ return a.id === id; });
+        var newCoins = Math.max(0, (acc.coins||0) - 10);
+        try{ await sb.from('accounts').update({ coins: newCoins }).eq('id', id); acc.coins = newCoins; renderAll(); }catch(e){ alert('صار خطأ'); }
+      };
+    });
+  }
+
+  // ---------- store ----------
+  function renderStore(){
+    var coinsArea = document.getElementById('store-coins-area');
+    if(!coinsArea) return;
+    if(state.session && state.session.accountId){
+      coinsArea.innerHTML = '<div class="notice ok">رصيدك: 🪙 ' + (state.session.coins||0) + ' عملة</div>';
+    } else {
+      coinsArea.innerHTML = '<p class="lead" style="margin:0;">سجّل دخولك بحساب عشان تقدر تجمع وتصرف عملات.</p>';
+    }
+
+    var adminArea = document.getElementById('store-admin-area');
+    if(state.session && state.session.isAdmin){
+      adminArea.innerHTML = '<button class="btn primary" id="new-item-btn">+ إضافة عنصر للمتجر</button>';
+      document.getElementById('new-item-btn').onclick = async function(){
+        var name = prompt('اسم العنصر');
+        if(!name) return;
+        var desc = prompt('وصف قصير (اختياري)') || '';
+        var cost = Number(prompt('السعر بالعملات', '50'));
+        if(!cost || cost <= 0) return;
+        try{
+          var { data, error } = await sb.from('store_items').insert({ name: name, description: desc, cost: cost }).select().single();
+          if(error) throw error;
+          state.storeItems.push(data);
+          renderAll();
+        }catch(e){ alert('صار خطأ بإضافة العنصر'); }
+      };
+    } else { adminArea.innerHTML = ''; }
+
+    var itemsArea = document.getElementById('store-items-area');
+    if(state.storeItems.length === 0){
+      itemsArea.innerHTML = '<div class="feed-empty">المتجر فاضي حالياً.</div>';
+    } else {
+      itemsArea.innerHTML = state.storeItems.map(function(it){
+        var canBuy = state.session && state.session.accountId && (state.session.coins||0) >= it.cost;
+        var delBtn = (state.session && state.session.isAdmin) ? '<button class="btn small ghost" data-delitem="' + it.id + '">حذف</button>' : '';
+        return '<div class="store-item-card"><div><div class="store-item-name">' + esc(it.name) + '</div>' +
+          (it.description ? '<div class="store-item-desc">' + esc(it.description) + '</div>' : '') +
+          '<div class="store-item-cost">🪙 ' + it.cost + '</div></div>' +
+          '<div class="card-actions">' + delBtn +
+          '<button class="btn small primary" data-buyitem="' + it.id + '" ' + (canBuy ? '' : 'disabled') + '>اطلب</button></div></div>';
+      }).join('');
+    }
+    itemsArea.querySelectorAll('[data-buyitem]').forEach(function(b){
+      b.onclick = async function(){
+        var id = b.getAttribute('data-buyitem');
+        var item = state.storeItems.find(function(i){ return i.id === id; });
+        if(!item || !state.session || !state.session.accountId) return;
+        if((state.session.coins||0) < item.cost){ alert('عملاتك ما تكفي.'); return; }
+        try{
+          var newCoins = state.session.coins - item.cost;
+          await sb.from('accounts').update({ coins: newCoins }).eq('id', state.session.accountId);
+          var { data, error } = await sb.from('purchases').insert({ account_id: state.session.accountId, username: state.session.name, item_name: item.name, cost: item.cost }).select().single();
+          if(error) throw error;
+          state.purchases.unshift(data);
+          state.session.coins = newCoins;
+          saveSession(state.session);
+          var acc = state.accounts.find(function(a){ return a.id === state.session.accountId; });
+          if(acc) acc.coins = newCoins;
+          alert('تم إرسال طلبك! بتنسلّم قريباً من الإدارة.');
+          renderAll();
+        }catch(e){ alert('صار خطأ بالطلب'); }
+      };
+    });
+    itemsArea.querySelectorAll('[data-delitem]').forEach(function(b){
+      b.onclick = async function(){
+        var id = b.getAttribute('data-delitem');
+        try{
+          await sb.from('store_items').delete().eq('id', id);
+          state.storeItems = state.storeItems.filter(function(i){ return i.id !== id; });
+          renderAll();
+        }catch(e){ alert('صار خطأ بالحذف'); }
+      };
+    });
+
+    var purArea = document.getElementById('store-purchases-admin-area');
+    if(state.session && state.session.isAdmin){
+      var pending = state.purchases.filter(function(p){ return p.status === 'قيد الانتظار'; });
+      purArea.innerHTML = '<div class="panel"><label style="margin-bottom:10px;">طلبات الشراء (' + state.purchases.length + ')</label>' +
+        (state.purchases.length === 0 ? '<div class="feed-empty">ما فيه طلبات.</div>' :
+          state.purchases.map(function(p){
+            return '<div class="purchase-row"><span>' + esc(p.username) + ' — ' + esc(p.item_name) + ' (🪙' + p.cost + ')</span>' +
+              '<span><span class="status-chip">' + esc(p.status) + '</span>' +
+              (p.status === 'قيد الانتظار' ? ' <button class="btn small primary" data-deliver="' + p.id + '">تسليم</button>' : '') + '</span></div>';
+          }).join('')) + '</div>';
+      purArea.querySelectorAll('[data-deliver]').forEach(function(b){
+        b.onclick = async function(){
+          var id = b.getAttribute('data-deliver');
+          try{
+            await sb.from('purchases').update({ status: 'تم التسليم' }).eq('id', id);
+            var p = state.purchases.find(function(x){ return x.id === id; });
+            if(p) p.status = 'تم التسليم';
+            renderAll();
+          }catch(e){ alert('صار خطأ'); }
+        };
+      });
+    } else {
+      purArea.innerHTML = '';
+    }
   }
 
   // ---------- members ----------
@@ -1024,28 +1390,20 @@
       field.innerHTML = '';
       return;
     }
-    var shown = state.opinions.slice(-18);
-    var fieldW = field.clientWidth || 900;
-    var fieldH = field.clientHeight || 420;
+    var shown = state.opinions.slice(-10);
+    var fieldW = field.clientWidth || 320;
+    var fieldH = field.clientHeight || 200;
     shown.forEach(function(o){
       var b = document.createElement('div');
       b.className = 'bubble';
       var delBtn = (state.session && state.session.isAdmin) ? ' <button class="del-op" data-delop="' + o.id + '">حذف</button>' : '';
       b.innerHTML = '<div class="who"><span>' + esc(o.name) + ' — ' + esc(o.truth) + '</span>' + delBtn + '</div>' + esc(o.text);
 
-      // keep bubbles out of the center-left text column: bias to right third (over emblem)
-      // or a thin top band across full width, so title/subtitle/buttons stay clear.
-      var left, top;
-      if(Math.random() < 0.6){
-        left = rand(fieldW * 0.62, Math.max(fieldW * 0.62 + 10, fieldW - 190));
-        top = rand(4, Math.max(10, fieldH - 90));
-      } else {
-        left = rand(4, Math.max(10, fieldW - 190));
-        top = rand(2, Math.max(8, fieldH * 0.14));
-      }
-      var dx = rand(-24, 24);
-      var dy = rand(-22, 22);
-      var rot = rand(-3, 3);
+      var left = rand(2, Math.max(6, fieldW - 160));
+      var top = rand(2, Math.max(6, fieldH - 66));
+      var dx = rand(-14, 14);
+      var dy = rand(-12, 12);
+      var rot = rand(-2, 2);
       var dur = rand(8, 16);
       var delay = rand(0, 6);
 
