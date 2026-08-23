@@ -82,6 +82,44 @@
   .purchase-row{display:flex;justify-content:space-between;align-items:center;gap:10px;border-bottom:1px dashed var(--line);padding:10px 0;font-size:13px;flex-wrap:wrap;}
   .purchase-row:last-child{border-bottom:none;}
   .status-chip{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--line);color:var(--text-dim);}
+
+  /* notification dots */
+  .notif-dot{display:none;position:absolute;top:-2px;left:-6px;width:8px;height:8px;border-radius:50%;background:var(--stamp-red-bright);box-shadow:0 0 0 2px var(--bg-panel);}
+  .notif-dot.show{display:inline-block;}
+  .tab{position:relative;}
+  .bottom-nav a .ic{position:relative;}
+
+  /* overlays */
+  .overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .overlay.hidden{display:none;}
+  .overlay-backdrop{position:absolute;inset:0;background:rgba(2,2,2,0.82);}
+  .overlay-panel{position:relative;z-index:1;background:var(--bg-panel);border:1px solid var(--line);border-radius:12px;padding:22px;max-width:420px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6);}
+  .overlay-close{position:absolute;top:10px;left:10px;background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;}
+  .id-card-panel{text-align:center;border:1px solid var(--gold);}
+  .id-card-title{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;}
+  .id-card-avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--gold);margin:0 auto 14px;display:block;}
+  .id-card-name{font-family:var(--disp);font-size:24px;color:var(--paper);margin-bottom:6px;}
+  .id-card-id{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:16px;}
+
+  /* search */
+  .search-row{margin-bottom:16px;}
+  .search-row input{margin-bottom:0;}
+
+  /* activity timeline */
+  .activity-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);}
+  .activity-item:last-child{border-bottom:none;}
+  .activity-icon{flex:none;width:30px;height:30px;border-radius:50%;background:var(--bg-panel-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px;}
+  .activity-text{font-size:13px;color:var(--text);}
+  .activity-time{font-family:var(--mono);font-size:10px;color:var(--text-dim);margin-top:2px;}
+
+  /* elimination ladder */
+  .elim-ladder{position:relative;padding-right:20px;border-right:2px solid var(--line);margin-right:8px;}
+  .elim-item{position:relative;padding:10px 0 10px 0;}
+  .elim-item::before{content:"";position:absolute;right:-26px;top:16px;width:10px;height:10px;border-radius:50%;background:var(--stamp-red-bright);border:2px solid var(--bg-deep);}
+  .elim-item .who{font-weight:600;color:var(--paper);}
+  .elim-item .meta{font-family:var(--mono);font-size:11px;color:var(--text-dim);}
+  .active-chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+  .active-chip{font-family:var(--mono);font-size:11px;background:var(--bg-panel-2);border:1px solid var(--gold);color:var(--gold);border-radius:12px;padding:4px 10px;}
   .session-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green-ok);}
   .session-pill button{background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:11px;}
 
@@ -250,13 +288,14 @@
     <nav class="tabs">
       <a class="tab" href="#opinions">الآراء</a>
       <a class="tab" href="#polls">تصويتات</a>
-      <a class="tab" href="#chat">دردشة</a>
+      <a class="tab" href="#chat">دردشة<span class="notif-dot" id="dot-chat-tab"></span></a>
       <a class="tab" href="#members">الأعضاء</a>
       <a class="tab" href="#leaderboard">الترتيب</a>
       <a class="tab" href="#matches">المباريات</a>
       <a class="tab" href="#operations">العمليات</a>
-      <a class="tab" href="#store">المتجر</a>
-      <a class="tab" href="#login">الحساب</a>
+      <a class="tab" href="#activity">السجل</a>
+      <a class="tab" href="#store">المتجر<span class="notif-dot" id="dot-store-tab"></span></a>
+      <a class="tab" href="#login">الحساب<span class="notif-dot" id="dot-account-tab"></span></a>
     </nav>
     <div class="menu-wrap" id="menu-wrap">
       <button class="icon-btn" id="menu-btn" aria-label="القائمة">☰</button>
@@ -267,10 +306,11 @@
         <a class="menu-item" href="#leaderboard">الترتيب</a>
         <a class="menu-item" href="#matches">المباريات</a>
         <a class="menu-item" href="#polls">التصويتات</a>
-        <a class="menu-item" href="#chat">الدردشة</a>
+        <a class="menu-item" href="#chat">الدردشة<span class="notif-dot" id="dot-chat-menu"></span></a>
         <a class="menu-item" href="#opinions">الآراء</a>
         <a class="menu-item" href="#operations">العمليات</a>
         <a class="menu-item" href="#store">المتجر</a>
+        <a class="menu-item" href="#activity">سجل الأحداث</a>
       </div>
     </div>
   </div>
@@ -350,7 +390,7 @@
     <h2>أعضاء CIA</h2>
     <p class="lead">قائمة الأعضاء الرسمية — محفوظة فعلياً وتظهر لكل زائر. أي تعديل من الإدارة يظهر مباشرة للجميع.</p>
     <div id="members-notice"></div>
-
+    <div class="search-row"><input type="text" id="members-search" placeholder="🔍 دوّر على عضو بالاسم..."></div>
     <div class="grid-members" id="members-grid"></div>
     <div id="join-area" style="margin-top:24px;"></div>
   </div>
@@ -403,6 +443,7 @@
     <p class="eyebrow">دردشة مباشرة</p>
     <h2>شاتبوكس CIA</h2>
     <p class="lead">مساحة دردشة للأعضاء — الرسائل تتحدث تلقائياً كل بضع ثوان.</p>
+    <div class="search-row"><input type="text" id="chat-search" placeholder="🔍 دوّر برسائل الدردشة..."></div>
     <div class="chat-box" id="chat-box"></div>
     <div id="chat-form-area"></div>
   </div>
@@ -415,10 +456,23 @@
     <p class="lead">سجّل نتيجة أي مباراة بين عضوين. الفائز ياخذ نقاط تلقائياً، ولو حددت "مباراة إقصاء" ينحذف الخاسر من التصنيف النشط.</p>
     <div id="matches-form-area" class="panel" style="margin-bottom:24px;"></div>
     <div id="eliminated-area" style="margin-bottom:24px;"></div>
+    <div class="panel" style="margin-bottom:24px;">
+      <label style="margin-bottom:14px;">سلّم الإقصاء</label>
+      <div id="elim-ladder-area"></div>
+    </div>
     <div class="panel">
       <label style="margin-bottom:14px;">آخر المباريات</label>
       <div id="matches-feed"></div>
     </div>
+  </div>
+</section>
+
+<section id="activity">
+  <div class="container">
+    <p class="eyebrow">أرشيف الأحداث</p>
+    <h2>سجل أحداث CIA</h2>
+    <p class="lead">كل شي صار بالقروب بمكان واحد — انضمامات، مباريات، وطلبات شراء.</p>
+    <div class="panel"><div id="activity-feed"></div></div>
   </div>
 </section>
 
@@ -453,9 +507,19 @@
   <a href="#hero"><span class="ic"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 20v-6h5v6"/></svg></span>بيت</a>
   <a href="#matches"><span class="ic"><svg viewBox="0 0 24 24"><path d="M8 4h8v4a4 4 0 0 1-8 0V4z"/><path d="M5 5H4a2 2 0 0 0 0 4h1"/><path d="M19 5h1a2 2 0 0 1 0 4h-1"/><path d="M9 15h6"/><path d="M12 12v3"/><path d="M7 20h10"/><path d="M9 20v-2.5a3 3 0 0 1 6 0V20"/></svg></span>مباريات</a>
   <a href="#members"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2c2.5.3 4.5 2.4 4.5 5"/></svg></span>أعضاء</a>
-  <a href="#chat"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/><path d="M8 9h8"/><path d="M8 12.5h5"/></svg></span>دردشة</a>
-  <a href="#login"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg></span>المزيد</a>
+  <a href="#chat"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/><path d="M8 9h8"/><path d="M8 12.5h5"/></svg><span class="notif-dot" id="dot-chat-bottom"></span></span>دردشة</a>
+  <a href="#login"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg><span class="notif-dot" id="dot-account-bottom"></span></span>المزيد</a>
 </nav>
+
+<div class="overlay hidden" id="member-profile-overlay">
+  <div class="overlay-backdrop" id="member-profile-backdrop"></div>
+  <div class="overlay-panel" id="member-profile-panel"></div>
+</div>
+
+<div class="overlay hidden" id="welcome-card-overlay">
+  <div class="overlay-backdrop" id="welcome-card-backdrop"></div>
+  <div class="overlay-panel id-card-panel" id="welcome-card-panel"></div>
+</div>
 
 <script>
 (function(){
@@ -465,6 +529,8 @@
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [] };
+  var membersFilterQuery = '';
+  var chatFilterQuery = '';
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function initials(name){ var p=(name||'?').trim().split(' '); return p.length>1 ? (p[0][0]+p[1][0]) : (name||'?').slice(0,2); }
@@ -588,10 +654,13 @@
     renderJoinArea();
     renderLeaderboard();
     renderMatches();
+    renderElimLadder();
     renderPolls();
     renderChat();
     renderStore();
+    renderActivity();
     renderFeed();
+    updateNotifDots();
     document.getElementById('visit-count').textContent = state.visits;
     document.getElementById('member-count').textContent = state.members.length;
   }
@@ -784,7 +853,15 @@
           state.accounts.push(data);
           state.session = { name: data.username, accountId: data.id, avatar: data.avatar, rank: data.rank, coins: data.coins, isAdmin: false };
           saveSession(state.session);
+          // auto-link: create a member roster entry if one doesn't already exist for this username
+          if(!state.members.some(function(m){ return m.name === data.username; })){
+            try{
+              var { data: newMember } = await sb.from('members').insert({ name: data.username, role: 'عضو جديد', note: 'انضم عن طريق إنشاء حساب', points: 0 }).select().single();
+              if(newMember) state.members.push(newMember);
+            }catch(linkErr){ /* non-fatal */ }
+          }
           renderAll();
+          showWelcomeCard(data);
         }catch(e){
           var msg = (e && (e.message || e.details || e.hint)) ? String(e.message || e.details || e.hint) : 'صار خطأ، حاول مرة ثانية.';
           statusEl.innerHTML = '<div class="notice err">خطأ: ' + msg.replace(/</g,'&lt;') + '</div>';
@@ -945,9 +1022,13 @@
   function renderMembers(){
     var grid = document.getElementById('members-grid');
     grid.innerHTML = '';
-    state.members.forEach(function(m){
+    var filtered = state.members.filter(function(m){
+      return !membersFilterQuery || m.name.toLowerCase().indexOf(membersFilterQuery) !== -1;
+    });
+    filtered.forEach(function(m){
       var card = document.createElement('div');
       card.className = 'card-member';
+      card.style.cursor = 'pointer';
       var actions = '';
       if(state.session && state.session.isAdmin){
         actions = '<div class="card-actions">' +
@@ -955,13 +1036,21 @@
           '<button class="btn small ghost" data-act="del" data-id="' + m.id + '">حذف</button>' +
         '</div>';
       }
+      var linkedAcc = state.accounts.find(function(a){ return a.username === m.name; });
+      var avatarHtml = (linkedAcc && linkedAcc.avatar)
+        ? '<img src="' + linkedAcc.avatar + '" style="width:52px;height:52px;border-radius:6px;object-fit:cover;border:1px solid var(--line);margin-bottom:14px;">'
+        : '<div class="avatar">' + esc(initials(m.name)) + '</div>';
       card.innerHTML =
-        '<div class="avatar">' + esc(initials(m.name)) + '</div>' +
-        '<div class="member-name">' + esc(m.name) + ' <span class="level-chip">Lv.' + levelFromPoints(m.points) + '</span>' + (m.eliminated ? ' <span class="badge out">مُقصى</span>' : '') + '</div>' +
+        avatarHtml +
+        '<div class="member-name" data-openprofile="' + m.id + '">' + esc(m.name) + ' <span class="level-chip">Lv.' + levelFromPoints(m.points) + '</span>' + (m.eliminated ? ' <span class="badge out">مُقصى</span>' : '') + '</div>' +
         '<div class="member-role">' + esc(m.role) + '</div>' +
         '<div class="member-note">' + esc(m.note) + '</div>' +
         '<div class="member-points">النقاط: ' + (m.points||0) + ' · فوز ' + (m.wins||0) + ' / خسارة ' + (m.losses||0) + '</div>' +
         (achievementFor(m.wins) ? '<div class="achv-chip">' + achievementFor(m.wins) + '</div>' : '') + actions;
+      card.addEventListener('click', function(e){
+        if(e.target.closest('[data-act]')) return;
+        openMemberProfile(m);
+      });
       grid.appendChild(card);
     });
 
@@ -1332,10 +1421,14 @@
   function renderChat(){
     var box = document.getElementById('chat-box');
     var wasNearBottom = (box.scrollTop + box.clientHeight) >= (box.scrollHeight - 40);
-    if(state.chatMessages.length === 0){
-      box.innerHTML = '<div class="feed-empty">لا توجد رسائل بعد. كن أول من يكتب.</div>';
+    var filteredMsgs = state.chatMessages.filter(function(m){
+      if(!chatFilterQuery) return true;
+      return m.name.toLowerCase().indexOf(chatFilterQuery) !== -1 || m.message.toLowerCase().indexOf(chatFilterQuery) !== -1;
+    });
+    if(filteredMsgs.length === 0){
+      box.innerHTML = '<div class="feed-empty">' + (chatFilterQuery ? 'ما فيه نتائج مطابقة.' : 'لا توجد رسائل بعد. كن أول من يكتب.') + '</div>';
     } else {
-      box.innerHTML = state.chatMessages.map(function(m){
+      box.innerHTML = filteredMsgs.map(function(m){
         var delBtn = (state.session && state.session.isAdmin) ? ' <button class="del-op" data-delchat="' + m.id + '">حذف</button>' : '';
         return '<div class="chat-msg"><div class="who"><span>' + esc(m.name) + '</span>' + delBtn + '</div><div class="txt">' + esc(m.message) + '</div></div>';
       }).join('');
@@ -1460,7 +1553,155 @@
   document.addEventListener('click', function(e){
     var r = e.target.closest && e.target.closest('.redact');
     if(r){ r.classList.toggle('open'); }
+    var op = e.target.closest && e.target.closest('[data-openprofile]');
+    if(op){
+      var id = op.getAttribute('data-openprofile');
+      var m = state.members.find(function(x){ return x.id === id; });
+      if(m) openMemberProfile(m);
+    }
   });
+
+  // ---------- member profile overlay ----------
+  function closeOverlay(id){ document.getElementById(id).classList.add('hidden'); }
+
+  function openMemberProfile(m){
+    var linkedAcc = state.accounts.find(function(a){ return a.username === m.name; });
+    var avatarHtml = (linkedAcc && linkedAcc.avatar)
+      ? '<img class="profile-avatar" src="' + linkedAcc.avatar + '" style="margin:0 auto 14px;display:block;">'
+      : '<div class="profile-avatar-fallback" style="margin:0 auto 14px;">' + esc(initials(m.name)) + '</div>';
+    var recentMsgs = state.chatMessages.filter(function(c){ return c.name === m.name; }).slice(-4).reverse();
+    var msgsHtml = recentMsgs.length
+      ? recentMsgs.map(function(c){ return '<div class="chat-msg" style="align-self:stretch;margin-bottom:8px;"><div class="txt">' + esc(c.message) + '</div></div>'; }).join('')
+      : '<div class="feed-empty">ما فيه رسائل دردشة لهذا العضو.</div>';
+    document.getElementById('member-profile-panel').innerHTML =
+      '<button class="overlay-close" id="close-profile-btn">✕</button>' +
+      avatarHtml +
+      '<div style="text-align:center;">' +
+        '<div class="profile-name">' + esc(m.name) + '</div>' +
+        '<span class="rank-chip">' + esc(m.role) + '</span> <span class="level-chip">Lv.' + levelFromPoints(m.points) + '</span>' +
+        (m.eliminated ? ' <span class="badge out">مُقصى</span>' : '') +
+        (achievementFor(m.wins) ? '<div class="achv-chip">' + achievementFor(m.wins) + '</div>' : '') +
+      '</div>' +
+      '<p class="lead" style="text-align:center;margin:14px 0;">' + esc(m.note) + '</p>' +
+      '<div class="member-points" style="text-align:center;margin-bottom:16px;">النقاط: ' + (m.points||0) + ' · فوز ' + (m.wins||0) + ' / خسارة ' + (m.losses||0) + '</div>' +
+      '<label style="margin-bottom:10px;">آخر رسائل الدردشة</label>' + msgsHtml;
+    document.getElementById('close-profile-btn').onclick = function(){ closeOverlay('member-profile-overlay'); };
+    document.getElementById('member-profile-overlay').classList.remove('hidden');
+  }
+  document.getElementById('member-profile-backdrop').onclick = function(){ closeOverlay('member-profile-overlay'); };
+
+  // ---------- welcome ID card ----------
+  function showWelcomeCard(account){
+    var avatarHtml = account.avatar ? '<img class="id-card-avatar" src="' + account.avatar + '">' : '<div class="profile-avatar-fallback id-card-avatar" style="margin:0 auto 14px;">' + esc(initials(account.username)) + '</div>';
+    document.getElementById('welcome-card-panel').innerHTML =
+      '<div class="id-card-title">CIA — بطاقة هوية رسمية</div>' +
+      avatarHtml +
+      '<div class="id-card-name">' + esc(account.username) + '</div>' +
+      '<div class="id-card-id">رقم الهوية: CIA-' + account.id.slice(0,8).toUpperCase() + '</div>' +
+      '<span class="rank-chip">' + esc(account.rank) + '</span>' +
+      '<p class="lead" style="margin:18px 0;">أهلاً بك رسمياً في قروب CIA. حسابك جاهز، وانضممت لقائمة الأعضاء تلقائياً.</p>' +
+      '<button class="btn primary" id="welcome-continue-btn" style="width:100%;">متابعة</button>';
+    document.getElementById('welcome-continue-btn').onclick = function(){ closeOverlay('welcome-card-overlay'); };
+    document.getElementById('welcome-card-overlay').classList.remove('hidden');
+  }
+  document.getElementById('welcome-card-backdrop').onclick = function(){ closeOverlay('welcome-card-overlay'); };
+
+  // ---------- activity log ----------
+  function relTime(dateStr){
+    var d = new Date(dateStr);
+    return d.toLocaleDateString('ar-SA') + ' ' + d.toLocaleTimeString('ar-SA', {hour:'2-digit', minute:'2-digit'});
+  }
+
+  function renderActivity(){
+    var el = document.getElementById('activity-feed');
+    if(!el) return;
+    var events = [];
+    state.members.forEach(function(m){
+      if(m.created_at) events.push({ time: m.created_at, icon: '👤', text: esc(m.name) + ' انضم لقائمة الأعضاء' });
+    });
+    state.matches.forEach(function(mt){
+      if(mt.created_at) events.push({ time: mt.created_at, icon: '🏆', text: esc(mt.winner) + ' فاز على ' + esc(mt.winner === mt.player1 ? mt.player2 : mt.player1) + ' (' + mt.score1 + '—' + mt.score2 + ')' + (mt.elimination ? ' — مباراة إقصاء' : '') });
+    });
+    state.purchases.forEach(function(p){
+      if(p.created_at) events.push({ time: p.created_at, icon: '🛒', text: esc(p.username) + ' طلب "' + esc(p.item_name) + '" من المتجر' });
+    });
+    events.sort(function(a,b){ return new Date(b.time) - new Date(a.time); });
+    events = events.slice(0, 40);
+    if(events.length === 0){ el.innerHTML = '<div class="feed-empty">ما فيه أحداث مسجلة بعد.</div>'; return; }
+    el.innerHTML = events.map(function(ev){
+      return '<div class="activity-item"><div class="activity-icon">' + ev.icon + '</div><div><div class="activity-text">' + ev.text + '</div><div class="activity-time">' + relTime(ev.time) + '</div></div></div>';
+    }).join('');
+  }
+
+  // ---------- elimination ladder ----------
+  function renderElimLadder(){
+    var el = document.getElementById('elim-ladder-area');
+    if(!el) return;
+    var active = state.members.filter(function(m){ return !m.eliminated; });
+    var elimMatches = state.matches.filter(function(mt){ return mt.elimination; }).sort(function(a,b){ return new Date(a.created_at) - new Date(b.created_at); });
+    var html = '<div class="active-chip-row">' +
+      (active.length ? active.map(function(m){ return '<span class="active-chip">' + esc(m.name) + '</span>'; }).join('') : '<span class="feed-empty">ما فيه أعضاء نشطين حالياً.</span>') +
+      '</div>';
+    if(elimMatches.length === 0){
+      html += '<div class="feed-empty">ما صارت أي إقصاءات بعد.</div>';
+    } else {
+      html += '<div class="elim-ladder">' + elimMatches.map(function(mt){
+        var loser = mt.winner === mt.player1 ? mt.player2 : mt.player1;
+        return '<div class="elim-item"><div class="who">' + esc(loser) + ' خرج من السباق</div>' +
+          '<div class="meta">بواسطة ' + esc(mt.winner) + ' (' + mt.score1 + '—' + mt.score2 + ') — ' + relTime(mt.created_at) + '</div></div>';
+      }).join('') + '</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  // ---------- notification dots ----------
+  function updateNotifDots(){
+    var seenChat = Number(localStorage.getItem('cia-seen-chat-count') || '0');
+    var chatNew = state.chatMessages.length > seenChat;
+    document.querySelectorAll('#dot-chat-tab, #dot-chat-bottom, #dot-chat-menu').forEach(function(d){
+      d.classList.toggle('show', chatNew);
+    });
+
+    var storeNew = false;
+    if(state.session && state.session.name){
+      var seenIds = (localStorage.getItem('cia-seen-delivered') || '').split(',').filter(Boolean);
+      var myDelivered = state.purchases.filter(function(p){ return p.username === state.session.name && p.status === 'تم التسليم'; });
+      storeNew = myDelivered.some(function(p){ return seenIds.indexOf(p.id) === -1; });
+    }
+    document.querySelectorAll('#dot-store-tab, #dot-account-tab, #dot-account-bottom').forEach(function(d){
+      d.classList.toggle('show', storeNew);
+    });
+  }
+
+  function markChatSeen(){
+    localStorage.setItem('cia-seen-chat-count', String(state.chatMessages.length));
+    updateNotifDots();
+  }
+  function markStoreSeen(){
+    if(state.session && state.session.name){
+      var myDelivered = state.purchases.filter(function(p){ return p.username === state.session.name && p.status === 'تم التسليم'; });
+      localStorage.setItem('cia-seen-delivered', myDelivered.map(function(p){ return p.id; }).join(','));
+    }
+    updateNotifDots();
+  }
+  document.querySelectorAll('a[href="#chat"]').forEach(function(a){ a.addEventListener('click', markChatSeen); });
+  document.querySelectorAll('a[href="#login"], a[href="#store"]').forEach(function(a){ a.addEventListener('click', markStoreSeen); });
+
+  // ---------- search wiring ----------
+  var membersSearchEl = document.getElementById('members-search');
+  if(membersSearchEl){
+    membersSearchEl.addEventListener('input', function(e){
+      membersFilterQuery = e.target.value.trim().toLowerCase();
+      renderMembers();
+    });
+  }
+  var chatSearchEl = document.getElementById('chat-search');
+  if(chatSearchEl){
+    chatSearchEl.addEventListener('input', function(e){
+      chatFilterQuery = e.target.value.trim().toLowerCase();
+      renderChat();
+    });
+  }
 
   var membersGridEl = document.getElementById('members-grid');
   membersGridEl.innerHTML = '<div class="loading">جاري تحميل الأعضاء...</div>';
