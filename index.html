@@ -223,16 +223,31 @@
     border:1px solid var(--line);
   }
   .bubble{
-    position:absolute;max-width:150px;min-width:100px;padding:6px 10px;border-radius:12px;
-    background:var(--bg-panel-2);border:1px solid var(--line);font-size:10.5px;line-height:1.4;
-    box-shadow:0 6px 18px -10px rgba(0,0,0,.6);
+    position:absolute;max-width:180px;min-width:130px;padding:12px 14px 11px;
+    border-radius:16px 16px 16px 3px;
+    background:linear-gradient(160deg, var(--bg-panel-2), var(--bg-panel));
+    border:1px solid var(--line);font-size:11px;line-height:1.55;color:var(--text);
+    box-shadow:0 14px 34px -16px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.04);
     animation-name:floaty;animation-timing-function:ease-in-out;animation-iteration-count:infinite;animation-direction:alternate;
-    cursor:default;transition:border-color .2s, opacity .2s;
-    pointer-events:auto;opacity:.88;
+    cursor:default;transition:border-color .2s, opacity .2s, transform .2s;
+    pointer-events:auto;opacity:.92;
   }
-  .bubble:hover{border-color:var(--gold);z-index:5;animation-play-state:paused;opacity:1;}
-  .bubble .who{font-family:var(--mono);font-size:10px;color:var(--gold);margin-bottom:5px;display:flex;justify-content:space-between;gap:8px;}
-  .bubble .del-op{background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:10px;padding:0;}
+  .bubble.tail-b{border-radius:16px 16px 3px 16px;}
+  .bubble:hover{border-color:var(--gold);z-index:5;animation-play-state:paused;opacity:1;transform:scale(1.04);}
+  .bubble .who{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+  .bubble-avatar{
+    width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--bg-deep);
+    border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:9px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .bubble .who-name{font-weight:600;font-size:11px;color:var(--paper);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:78px;}
+  .bubble .truth-tag{
+    font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:8px;margin-inline-start:auto;flex-shrink:0;
+  }
+  .bubble .truth-tag.real{color:var(--green-ok);border:1px solid var(--green-ok);}
+  .bubble .truth-tag.fake{color:var(--stamp-red-bright);border:1px solid var(--stamp-red-bright);}
+  .bubble .text{color:var(--text);}
+  .bubble .del-op{background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:10px;padding:0;margin-inline-start:6px;flex-shrink:0;}
   @keyframes floaty{
     from{ transform:translate(0,0) rotate(0deg); }
     to{ transform:translate(var(--dx,20px), var(--dy,-26px)) rotate(var(--rot,2deg)); }
@@ -250,6 +265,25 @@
   .op-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:8px;padding:16px;}
   .op-tag{font-family:var(--mono);font-size:11px;color:var(--text-dim);margin-bottom:6px;}
   .op-name{font-weight:600;color:var(--paper);}
+
+  /* tournament history */
+  .tournament-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px;}
+  .tournament-card .t-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+  .tournament-card .t-name{font-family:var(--disp);font-size:20px;color:var(--paper);}
+  .tournament-card .t-date{font-family:var(--mono);font-size:11px;color:var(--text-dim);white-space:nowrap;}
+  .tournament-card .t-winner-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-family:var(--mono);font-size:12px;}
+  .tournament-card .t-winner-label{color:var(--text-dim);}
+  .tournament-card .t-winner-name{color:var(--gold);font-weight:600;}
+  .tournament-card .t-del{background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:11px;padding:0;}
+  .tournament-standings{display:flex;flex-direction:column;gap:2px;}
+  .tournament-standings .t-row{display:flex;align-items:center;gap:12px;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line);}
+  .tournament-standings .t-row:last-child{border-bottom:none;}
+  .tournament-standings .t-row.rank-1 .t-rank{color:var(--stamp-red-bright);}
+  .tournament-standings .t-rank{font-family:var(--mono);color:var(--gold);width:22px;flex-shrink:0;text-align:center;}
+  .standings-input-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+  .standings-input-row .s-rank{font-family:var(--mono);color:var(--text-dim);width:22px;flex-shrink:0;text-align:center;}
+  .standings-input-row input{margin-bottom:0;}
+  .standings-input-row .s-remove{background:none;border:none;color:var(--stamp-red-bright);font-family:var(--mono);font-size:14px;padding:0 4px;flex-shrink:0;}
 
   .badge{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);}
   .badge{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--gold);color:var(--gold);}
@@ -292,6 +326,7 @@
       <a class="tab" href="#members">الأعضاء</a>
       <a class="tab" href="#leaderboard">الترتيب</a>
       <a class="tab" href="#matches">المباريات</a>
+      <a class="tab" href="#tournaments">البطولات</a>
       <a class="tab" href="#operations">العمليات</a>
       <a class="tab" href="#activity">السجل</a>
       <a class="tab" href="#store">المتجر<span class="notif-dot" id="dot-store-tab"></span></a>
@@ -305,6 +340,7 @@
         <a class="menu-item" href="#members">الأعضاء</a>
         <a class="menu-item" href="#leaderboard">الترتيب</a>
         <a class="menu-item" href="#matches">المباريات</a>
+        <a class="menu-item" href="#tournaments">سجل البطولات</a>
         <a class="menu-item" href="#polls">التصويتات</a>
         <a class="menu-item" href="#chat">الدردشة<span class="notif-dot" id="dot-chat-menu"></span></a>
         <a class="menu-item" href="#opinions">الآراء</a>
@@ -467,6 +503,16 @@
   </div>
 </section>
 
+<section id="tournaments">
+  <div class="container">
+    <p class="eyebrow">الأرشيف</p>
+    <h2>سجل البطولات</h2>
+    <p class="lead">البطولات السابقة اللي خاضها القروب — الفائز والترتيب النهائي لكل بطولة.</p>
+    <div id="tournaments-admin-area" style="margin-bottom:24px;"></div>
+    <div id="tournaments-list"></div>
+  </div>
+</section>
+
 <section id="activity">
   <div class="container">
     <p class="eyebrow">أرشيف الأحداث</p>
@@ -528,7 +574,7 @@
   var ADMIN_CODE = "CIA-2026"; // كود دخول الإدارة — غيّره لكود خاص فيك
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [] };
+  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [], tournaments: [] };
   var membersFilterQuery = '';
   var chatFilterQuery = '';
 
@@ -623,6 +669,12 @@
       state.purchases = purchases || [];
     }catch(e){ console.error('purchases load failed', e); state.purchases = []; }
 
+    try{
+      var { data: tournaments, error: tErr } = await sb.from('tournaments').select('*').order('date', { ascending: false });
+      if(tErr) throw tErr;
+      state.tournaments = tournaments || [];
+    }catch(e){ console.error('tournaments load failed', e); state.tournaments = []; }
+
     // refresh session with latest account data (rank/coins/avatar might have changed)
     if(state.session && state.session.accountId){
       var freshAcc = state.accounts.find(function(a){ return a.id === state.session.accountId; });
@@ -655,6 +707,7 @@
     renderLeaderboard();
     renderMatches();
     renderElimLadder();
+    renderTournaments();
     renderPolls();
     renderChat();
     renderStore();
@@ -1337,6 +1390,71 @@
   }
 
   // ---------- polls ----------
+  // ---------- tournament history ----------
+  function renderTournaments(){
+    var adminArea = document.getElementById('tournaments-admin-area');
+    if(state.session && state.session.isAdmin){
+      adminArea.innerHTML = '<button class="btn primary" id="new-tournament-btn">+ إضافة بطولة</button>';
+      document.getElementById('new-tournament-btn').onclick = async function(){
+        var name = prompt('اسم البطولة');
+        if(!name) return;
+        var date = prompt('تاريخ البطولة (مثال: 2026-08-29) — اتركه فاضي لو ما تعرف');
+        var winner = prompt('اسم الفائز بالبطولة');
+        var standings = [];
+        for(var i=1;i<=10;i++){
+          var pname = prompt('العضو صاحب المركز رقم ' + i + ' (اتركه فاضي لو خلصت الترتيب)');
+          if(!pname) break;
+          standings.push({ rank: i, name: pname });
+        }
+        try{
+          var payload = { name: name, winner: winner || null, standings: standings };
+          if(date) payload.date = date;
+          var { data, error } = await sb.from('tournaments').insert(payload).select().single();
+          if(error) throw error;
+          state.tournaments.unshift(data);
+          renderTournaments();
+        }catch(e){
+          var msg = (e && (e.message || e.details || e.hint)) ? e.message || e.details || e.hint : 'صار خطأ';
+          alert('صار خطأ بإضافة البطولة: ' + msg);
+        }
+      };
+    } else {
+      adminArea.innerHTML = '';
+    }
+
+    var list = document.getElementById('tournaments-list');
+    if(state.tournaments.length === 0){
+      list.innerHTML = '<div class="feed-empty">ما فيه بطولات مسجلة بعد.</div>';
+      return;
+    }
+    list.innerHTML = state.tournaments.map(function(t){
+      var dateStr = t.date ? new Date(t.date).toLocaleDateString('ar-SA') : '';
+      var standingsArr = Array.isArray(t.standings) ? t.standings.slice().sort(function(a,b){ return (a.rank||0) - (b.rank||0); }) : [];
+      var rows = standingsArr.map(function(s){
+        return '<div class="t-row rank-' + s.rank + '"><span class="t-rank">' + esc(s.rank) + '</span><span>' + esc(s.name) + '</span></div>';
+      }).join('');
+      var delBtn = (state.session && state.session.isAdmin) ? '<button class="t-del" data-deltourn="' + t.id + '">حذف البطولة</button>' : '';
+      return '<div class="tournament-card">' +
+        '<div class="t-head"><span class="t-name">' + esc(t.name) + '</span>' + (dateStr ? '<span class="t-date">' + esc(dateStr) + '</span>' : '') + '</div>' +
+        (t.winner ? '<div class="t-winner-row"><span class="t-winner-label">🏆 الفائز:</span><span class="t-winner-name">' + esc(t.winner) + '</span></div>' : '') +
+        '<div class="tournament-standings">' + (rows || '<div class="feed-empty">ما فيه ترتيب مسجل لهذي البطولة.</div>') + '</div>' +
+        delBtn +
+      '</div>';
+    }).join('');
+
+    list.querySelectorAll('[data-deltourn]').forEach(function(b){
+      b.onclick = async function(){
+        if(!confirm('تحذف هذي البطولة نهائياً؟')) return;
+        var id = b.getAttribute('data-deltourn');
+        try{
+          await sb.from('tournaments').delete().eq('id', id);
+          state.tournaments = state.tournaments.filter(function(t){ return t.id !== id; });
+          renderTournaments();
+        }catch(e){ alert('صار خطأ بالحذف'); }
+      };
+    });
+  }
+
   function renderPolls(){
     var adminArea = document.getElementById('poll-admin-area');
     if(state.session && state.session.isAdmin){
@@ -1492,14 +1610,23 @@
     var shown = state.opinions.slice(-10);
     var fieldW = field.clientWidth || 320;
     var fieldH = field.clientHeight || 200;
-    shown.forEach(function(o){
+    shown.forEach(function(o, idx){
       var b = document.createElement('div');
-      b.className = 'bubble';
-      var delBtn = (state.session && state.session.isAdmin) ? ' <button class="del-op" data-delop="' + o.id + '">حذف</button>' : '';
-      b.innerHTML = '<div class="who"><span>' + esc(o.name) + ' — ' + esc(o.truth) + '</span>' + delBtn + '</div>' + esc(o.text);
+      b.className = 'bubble' + (idx % 2 ? ' tail-b' : '');
+      var delBtn = (state.session && state.session.isAdmin) ? '<button class="del-op" data-delop="' + o.id + '">✕</button>' : '';
+      var isReal = o.truth === 'حقيقي';
+      var tagClass = isReal ? 'real' : 'fake';
+      b.innerHTML =
+        '<div class="who">' +
+          '<div class="bubble-avatar">' + esc(initials(o.name)) + '</div>' +
+          '<span class="who-name">' + esc(o.name) + '</span>' +
+          '<span class="truth-tag ' + tagClass + '">' + esc(o.truth) + '</span>' +
+          delBtn +
+        '</div>' +
+        '<div class="text">' + esc(o.text) + '</div>';
 
-      var left = rand(2, Math.max(6, fieldW - 160));
-      var top = rand(2, Math.max(6, fieldH - 66));
+      var left = rand(2, Math.max(6, fieldW - 190));
+      var top = rand(2, Math.max(6, fieldH - 74));
       var dx = rand(-14, 14);
       var dy = rand(-12, 12);
       var rot = rand(-2, 2);
