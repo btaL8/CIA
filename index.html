@@ -579,6 +579,18 @@
   var chatFilterQuery = '';
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
+  function parseFlexibleDate(input){
+    if(!input) return null;
+    input = input.trim();
+    // already ISO: 2026-08-29
+    var iso = input.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if(iso) return iso[1] + '-' + pad2(iso[2]) + '-' + pad2(iso[3]);
+    // day-month-year with - or / : 28-8-2026 / 28/8/2026
+    var dmy = input.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})$/);
+    if(dmy) return dmy[3] + '-' + pad2(dmy[1]) + '-' + pad2(dmy[2]);
+    return null;
+  }
+  function pad2(n){ n = String(n); return n.length < 2 ? '0' + n : n; }
   function initials(name){ var p=(name||'?').trim().split(' '); return p.length>1 ? (p[0][0]+p[1][0]) : (name||'?').slice(0,2); }
   function levelFromPoints(points){ return Math.max(1, Math.floor((points||0) / 100) + 1); }
   function achievementFor(wins){
@@ -1398,7 +1410,12 @@
       document.getElementById('new-tournament-btn').onclick = async function(){
         var name = prompt('اسم البطولة');
         if(!name) return;
-        var date = prompt('تاريخ البطولة (مثال: 2026-08-29) — اتركه فاضي لو ما تعرف');
+        var dateInput = prompt('تاريخ البطولة (مثال: 29-8-2026 أو 2026-08-29) — اتركه فاضي لو ما تعرف');
+        var date = null;
+        if(dateInput && dateInput.trim()){
+          date = parseFlexibleDate(dateInput);
+          if(!date){ alert('صيغة التاريخ مو مفهومة. اكتبه بشكل يوم-شهر-سنة زي 29-8-2026 أو سنة-شهر-يوم زي 2026-08-29.'); return; }
+        }
         var winner = prompt('اسم الفائز بالبطولة');
         var standings = [];
         for(var i=1;i<=10;i++){
