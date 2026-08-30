@@ -461,11 +461,11 @@
   .music-bar-inner{position:relative;max-width:1080px;margin:0 auto;height:100%;padding:0 16px;display:flex;align-items:center;gap:12px;}
 
   /* rotating gothic ring + glow behind the play button */
-  .music-play-wrap{position:relative;flex:none;width:38px;height:38px;display:flex;align-items:center;justify-content:center;}
-  .music-play-wrap::before{content:"";position:absolute;inset:-3px;border-radius:50%;
+  .music-play-wrap{position:relative;flex:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;}
+  .music-play-wrap::before{content:"";position:absolute;inset:-4px;border-radius:50%;
     background:conic-gradient(from 0deg, transparent 0%, rgba(177,133,47,.85) 12%, transparent 26%, transparent 50%, rgba(177,133,47,.55) 62%, transparent 76%);
     animation:musicRingSpin 5.5s linear infinite;opacity:.85;}
-  .music-play-wrap::after{content:"";position:absolute;inset:-8px;border-radius:50%;
+  .music-play-wrap::after{content:"";position:absolute;inset:-10px;border-radius:50%;
     background:radial-gradient(circle, rgba(177,133,47,.35), transparent 70%);
     filter:blur(2px);opacity:0;transition:opacity .4s;}
   .music-bar.is-playing .music-play-wrap::after{opacity:1;animation:musicPulseGlow 1.8s ease-in-out infinite;}
@@ -473,12 +473,30 @@
   @keyframes musicRingSpin{to{transform:rotate(360deg);}}
   @keyframes musicPulseGlow{0%,100%{opacity:.55;transform:scale(1);}50%{opacity:1;transform:scale(1.12);}}
 
-  .music-play-btn{position:relative;z-index:1;flex:none;width:30px;height:30px;border-radius:50%;
+  /* spinning bronze vinyl disc — sits behind the static play/pause button,
+     grooves + a soft label-well, only spins & glows while music is playing */
+  .music-disc{position:absolute;inset:2px;border-radius:50%;pointer-events:none;
+    background:
+      repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,.5) 0 1px, rgba(177,133,47,.16) 1px 2px, transparent 2px 4px),
+      radial-gradient(circle at 33% 28%, rgba(242,230,200,.28), transparent 50%),
+      radial-gradient(circle at 50% 50%, #241c0d 0%, #171209 55%, #0a0805 100%);
+    border:1px solid rgba(177,133,47,.5);
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 8px rgba(0,0,0,.7), 0 0 8px -2px rgba(177,133,47,.35);
+    animation:musicDiscSpin 7s linear infinite paused;
+    transition:box-shadow .4s;}
+  .music-disc::after{content:"";position:absolute;inset:38%;border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, #f2e6c8, #b1852f 60%, #3d2c10 100%);
+    border:1px solid #2b1f0c;box-shadow:0 0 6px -1px rgba(177,133,47,.6);}
+  .music-bar.is-playing .music-disc{animation-play-state:running;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 8px rgba(0,0,0,.7), 0 0 16px -1px rgba(177,133,47,.85);}
+  @keyframes musicDiscSpin{to{transform:rotate(360deg);}}
+
+  .music-play-btn{position:relative;z-index:1;flex:none;width:22px;height:22px;border-radius:50%;
     background:radial-gradient(circle at 34% 30%, #f2e6bf, #b1852f 55%, #3d2c10 100%);
     border:1px solid #2b1f0c;color:#1a1206;display:flex;align-items:center;justify-content:center;cursor:pointer;
     box-shadow:0 1px 4px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.25);
     transition:filter .2s, transform .15s;}
-  .music-play-btn svg{width:13px;height:13px;fill:#1a1206;}
+  .music-play-btn svg{width:10px;height:10px;fill:#1a1206;}
   .music-play-btn:hover{filter:brightness(1.15);}
   .music-play-btn:active{transform:scale(.92);}
 
@@ -551,6 +569,7 @@
 <div class="music-bar" id="music-bar">
   <div class="music-bar-inner">
     <div class="music-play-wrap">
+      <div class="music-disc" aria-hidden="true"></div>
       <button class="music-play-btn" id="music-play-btn" aria-label="تشغيل الموسيقى" title="تشغيل/إيقاف الموسيقى">
         <svg id="music-ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         <svg id="music-ic-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
@@ -874,8 +893,13 @@
   var chatFilterQuery = '';
   var REACTIONS_ENABLED = true; // set to false if the "reactions" table hasn't been created yet in Supabase
   var SITE_SETTINGS_ENABLED = true; // set to false if the "site_settings" table hasn't been created yet in Supabase
-  var MUSIC_STORAGE_BUCKET = 'music'; // Supabase Storage bucket used for the group's MP3 file
+  // NOTE: the MP3 is no longer pushed to Supabase Storage (buckets/policies were
+  // exactly why uploads used to hang forever on "جار الرفع..."). Instead the file
+  // is converted to a Base64 data-URL in the browser and saved directly as the
+  // text `value` of this row in `site_settings`, so every visitor's page just
+  // fetches that one row and plays it immediately — nothing to configure, nothing to hang.
   var MUSIC_SETTING_KEY = 'bg_music_url';
+  var MUSIC_MAX_FILE_MB = 15; // keep the data-URL (and the DB row) a reasonable size
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function parseFlexibleDate(input){
@@ -1152,6 +1176,19 @@
     ]);
   }
 
+  // Reads the File straight into a Base64 data-URL in the browser — no
+  // network round-trip, no bucket, nothing that can "hang". Rejects on the
+  // FileReader's own error event so a bad file never leaves the caller waiting.
+  function readFileAsDataUrl(file){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(){ resolve(reader.result); };
+      reader.onerror = function(){ reject(new Error('تعذّرت قراءة الملف من جهازك')); };
+      reader.onabort = function(){ reject(new Error('تم إلغاء قراءة الملف')); };
+      reader.readAsDataURL(file);
+    });
+  }
+
   async function uploadMusicFile(file){
     var statusEl = document.getElementById('music-upload-status');
     var labelEl = document.getElementById('music-upload-label');
@@ -1161,9 +1198,9 @@
     if(!state.session || !state.session.isAdmin){ showToastSafe('هذا الإجراء للإدارة فقط', 'err'); return; }
     var isMp3 = file.type === 'audio/mpeg' || file.type === 'audio/mp3' || /\.mp3$/i.test(file.name);
     if(!isMp3){ showToastSafe('الملف لازم يكون MP3', 'err'); return; }
-    if(file.size > 20 * 1024 * 1024){ showToastSafe('حجم الملف كبير — الحد الأقصى 20MB', 'err'); return; }
+    if(file.size > MUSIC_MAX_FILE_MB * 1024 * 1024){ showToastSafe('حجم الملف كبير — الحد الأقصى ' + MUSIC_MAX_FILE_MB + 'MB', 'err'); return; }
     if(!SITE_SETTINGS_ENABLED){ showToastSafe('أنشئ جدول site_settings في Supabase أولاً (key text primary key, value text)', 'err'); return; }
-    if(typeof sb === 'undefined' || !sb || !sb.storage){ showToastSafe('الاتصال بقاعدة البيانات غير جاهز — أعد تحميل الصفحة', 'err'); return; }
+    if(typeof sb === 'undefined' || !sb){ showToastSafe('الاتصال بقاعدة البيانات غير جاهز — أعد تحميل الصفحة', 'err'); return; }
 
     musicUploadBusy = true;
     if(labelEl){ labelEl.classList.add('is-busy'); labelEl.textContent = 'جارِ الرفع...'; }
@@ -1171,28 +1208,21 @@
     if(statusEl){ statusEl.className = 'music-upload-status'; statusEl.textContent = ''; }
 
     try{
-      var safeName = file.name.replace(/[^a-zA-Z0-9.]+/g, '-');
-      var path = 'theme-' + Date.now() + '-' + safeName;
+      // 1) File -> Base64 data-URL, entirely in the browser.
+      var dataUrl = await withTimeout(readFileAsDataUrl(file), 20000, 'timeout-read');
 
-      var upRes = await withTimeout(
-        sb.storage.from(MUSIC_STORAGE_BUCKET).upload(path, file, { upsert: true, contentType: file.type || 'audio/mpeg' }),
-        30000,
-        'timeout-upload'
-      );
-      if(upRes && upRes.error) throw upRes.error;
-
-      var pubRes = sb.storage.from(MUSIC_STORAGE_BUCKET).getPublicUrl(path);
-      var publicUrl = pubRes && pubRes.data && pubRes.data.publicUrl;
-      if(!publicUrl) throw new Error('تعذّر الحصول على رابط الملف بعد الرفع');
-
+      // 2) Save that data-URL directly as text in site_settings — this single
+      //    upsert is the only thing that has to succeed; every visitor's page
+      //    already polls/subscribes to this same table, so it plays instantly
+      //    for everyone with zero extra setup.
       var setRes = await withTimeout(
-        sb.from('site_settings').upsert({ key: MUSIC_SETTING_KEY, value: publicUrl }, { onConflict: 'key' }),
-        15000,
+        sb.from('site_settings').upsert({ key: MUSIC_SETTING_KEY, value: dataUrl }, { onConflict: 'key' }),
+        20000,
         'timeout-settings'
       );
       if(setRes && setRes.error) throw setRes.error;
 
-      state.siteSettings[MUSIC_SETTING_KEY] = publicUrl;
+      state.siteSettings[MUSIC_SETTING_KEY] = dataUrl;
       renderMusicBar();
       tryAutoplayMusic();
       if(statusEl){ statusEl.className = 'music-upload-status is-ok'; statusEl.textContent = 'تم الرفع ✓'; }
@@ -1202,14 +1232,14 @@
       console.error('music upload failed', e);
       var msg = 'فشل رفع الملف';
       var raw = (e && (e.message || e.error_description || e.statusCode || '')) + '';
-      if(e && e.message === 'timeout-upload'){
-        msg = 'انتهت مهلة الرفع — تأكد من الاتصال بالإنترنت وحاول مرة ثانية';
+      if(e && e.message === 'timeout-read'){
+        msg = 'تعذّرت قراءة الملف من جهازك — جرّب ملفاً آخر';
       } else if(e && e.message === 'timeout-settings'){
-        msg = 'تم رفع الملف لكن تعذّر حفظ الإعداد — تأكد من صلاحيات جدول site_settings';
-      } else if(/bucket not found/i.test(raw)){
-        msg = 'الـ Storage bucket باسم "music" غير موجود — أنشئه في Supabase وفعّل عليه صلاحية public';
+        msg = 'انتهت مهلة الحفظ — تأكد من الاتصال بالإنترنت وحاول مرة ثانية';
       } else if(/row-level security|permission|not authorized|403/i.test(raw)){
-        msg = 'صلاحيات Supabase تمنع الرفع — فعّل سياسات RLS للسماح بالكتابة على bucket "music" وجدول site_settings';
+        msg = 'صلاحيات Supabase تمنع الحفظ — فعّل سياسة RLS للسماح بالكتابة على جدول site_settings';
+      } else if(/too long|value too long|string data|payload too large/i.test(raw)){
+        msg = 'الملف كبير جداً على أن يُحفظ كنص — جرّب ملفاً أصغر';
       } else if(raw){
         msg = 'فشل رفع الملف: ' + raw;
       }
