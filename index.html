@@ -473,23 +473,22 @@
   @keyframes musicRingSpin{to{transform:rotate(360deg);}}
   @keyframes musicPulseGlow{0%,100%{opacity:.55;transform:scale(1);}50%{opacity:1;transform:scale(1.12);}}
 
-  /* spinning bronze vinyl disc — sits behind the static play/pause button,
-     grooves + a soft label-well, only spins & glows while music is playing */
+  /* ==== الغلاف/الشكل الزخرفي الأسود (بديل أيقونة الأسطوانة) ====
+     لاستبداله لاحقاً: عدّل فقط قاعدة .music-disc وما بعدها هنا —
+     باقي الكود (التشغيل، الرفع، الشريط) لا يعتمد على شكله إطلاقاً. */
   .music-disc{position:absolute;inset:2px;border-radius:50%;pointer-events:none;
     background:
-      repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,.5) 0 1px, rgba(177,133,47,.16) 1px 2px, transparent 2px 4px),
-      radial-gradient(circle at 33% 28%, rgba(242,230,200,.28), transparent 50%),
-      radial-gradient(circle at 50% 50%, #241c0d 0%, #171209 55%, #0a0805 100%);
-    border:1px solid rgba(177,133,47,.5);
-    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 8px rgba(0,0,0,.7), 0 0 8px -2px rgba(177,133,47,.35);
-    animation:musicDiscSpin 7s linear infinite paused;
-    transition:box-shadow .4s;}
-  .music-disc::after{content:"";position:absolute;inset:38%;border-radius:50%;
-    background:radial-gradient(circle at 40% 35%, #f2e6c8, #b1852f 60%, #3d2c10 100%);
-    border:1px solid #2b1f0c;box-shadow:0 0 6px -1px rgba(177,133,47,.6);}
-  .music-bar.is-playing .music-disc{animation-play-state:running;
-    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 8px rgba(0,0,0,.7), 0 0 16px -1px rgba(177,133,47,.85);}
-  @keyframes musicDiscSpin{to{transform:rotate(360deg);}}
+      radial-gradient(circle at 32% 26%, #262524 0%, #0a0a0a 55%, #000 100%);
+    border:1px solid rgba(177,133,47,.35);
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 8px rgba(0,0,0,.8), 0 0 8px -3px rgba(177,133,47,.35);
+    transition:box-shadow .4s, transform .4s;
+    animation:musicDiscBreathe 4s ease-in-out infinite;}
+  .music-disc::after{content:"";position:absolute;inset:36%;border-radius:50%;
+    background:linear-gradient(145deg, #1c1c1c, #050505);
+    border:1px solid rgba(177,133,47,.25);box-shadow:inset 0 0 6px rgba(0,0,0,.9);}
+  .music-bar.is-playing .music-disc{animation-duration:1.6s;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.6), inset 0 0 8px rgba(0,0,0,.8), 0 0 16px -1px rgba(177,133,47,.75);}
+  @keyframes musicDiscBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
 
   .music-play-btn{position:relative;z-index:1;flex:none;width:22px;height:22px;border-radius:50%;
     background:radial-gradient(circle at 34% 30%, #f2e6bf, #b1852f 55%, #3d2c10 100%);
@@ -518,6 +517,27 @@
   .music-wave span:nth-child(5){animation-delay:-.15s;}
   @keyframes musicWaveBounce{0%,100%{height:4px;}50%{height:18px;}}
 
+  /* شريط تقدّم رفيع أسفل الشريط بالكامل — قابل للسحب لتغيير موضع التشغيل */
+  .music-seek{position:absolute;left:0;right:0;bottom:0;width:100%;height:16px;margin:0;
+    -webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;z-index:2;}
+  .music-seek::-webkit-slider-runnable-track{height:3px;background:rgba(177,133,47,.18);}
+  .music-seek::-moz-range-track{height:3px;background:rgba(177,133,47,.18);}
+  .music-seek::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;margin-top:-3px;border-radius:50%;
+    background:#f2e6c8;box-shadow:0 0 6px rgba(177,133,47,.7);}
+  .music-seek::-moz-range-thumb{width:9px;height:9px;border:none;border-radius:50%;
+    background:#f2e6c8;box-shadow:0 0 6px rgba(177,133,47,.7);}
+  .music-seek::-webkit-progress-value{background:#b1852f;}
+
+  .music-time{flex:none;font-family:var(--mono);font-size:10px;color:#8a7e5e;white-space:nowrap;font-variant-numeric:tabular-nums;}
+
+  .music-volume{flex:none;display:flex;align-items:center;gap:6px;}
+  .music-volume svg{width:14px;height:14px;fill:#8a7e5e;flex:none;}
+  .music-volume-bar{-webkit-appearance:none;appearance:none;width:56px;height:3px;border-radius:3px;
+    background:rgba(177,133,47,.25);cursor:pointer;outline:none;accent-color:#b1852f;}
+  .music-volume-bar::-webkit-slider-thumb{-webkit-appearance:none;width:9px;height:9px;border-radius:50%;
+    background:#f2e6c8;cursor:pointer;margin-top:-3px;box-shadow:0 0 4px rgba(177,133,47,.6);}
+  .music-volume-bar::-moz-range-thumb{width:9px;height:9px;border:none;border-radius:50%;background:#f2e6c8;cursor:pointer;}
+
   .music-admin{flex:none;display:flex;align-items:center;gap:8px;}
   .music-upload-btn{position:relative;overflow:hidden;font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;color:#f2e6c8;
     background:linear-gradient(180deg,#221b0d,#171209);border:1px solid #4c3a18;border-radius:7px;padding:6px 10px;cursor:pointer;white-space:nowrap;
@@ -536,6 +556,7 @@
     .music-title{font-size:12.5px;}
     .music-hint{display:none;}
     .music-wave{display:none;}
+    .music-volume{display:none;}
     .music-upload-btn{padding:6px 8px;}
   }
 
@@ -580,14 +601,21 @@
       <span class="music-hint" id="music-hint">لا يوجد ملف موسيقى بعد</span>
     </div>
     <div class="music-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    <span class="music-time" id="music-time">0:00 / 0:00</span>
+    <div class="music-volume">
+      <svg viewBox="0 0 24 24" id="music-vol-icon"><path d="M4 9v6h4l5 5V4L8 9H4z"/></svg>
+      <input type="range" class="music-volume-bar" id="music-volume-bar" min="0" max="1" step="0.01" value="1">
+    </div>
     <div class="music-admin" id="music-admin-area" style="display:none;">
-      <label class="music-upload-btn" for="music-upload-input" id="music-upload-label">رفع MP3</label>
-      <input type="file" id="music-upload-input" accept="audio/mpeg,audio/mp3,.mp3" style="display:none;">
+      <label class="music-upload-btn" for="music-upload-input" id="music-upload-label">رفع ملف</label>
+      <input type="file" id="music-upload-input" accept="audio/mpeg,audio/mp3,.mp3,video/mp4,.mp4" style="display:none;">
       <span class="music-upload-status" id="music-upload-status"></span>
     </div>
   </div>
+  <input type="range" class="music-seek" id="music-seek" min="0" max="0" step="0.1" value="0" aria-label="موضع التشغيل">
 </div>
-<audio id="bg-audio" loop preload="none"></audio>
+<!-- video بدل audio: يشغّل ملفات MP4 كصوت فقط (مخفي بالكامل) بأعلى توافقية على آيفون وأندرويد -->
+<video id="bg-audio" loop preload="none" playsinline webkit-playsinline style="display:none"></video>
 
 <header>
   <div class="nav-wrap">
@@ -1074,17 +1102,29 @@
 
   var musicUploadBusy = false;
 
+  function fmtMusicTime(sec){
+    if(!isFinite(sec) || sec < 0) sec = 0;
+    var m = Math.floor(sec / 60);
+    var s = Math.floor(sec % 60);
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  var musicSeeking = false;
+
   function initMusicPlayer(){
     var playBtn = document.getElementById('music-play-btn');
     var audioEl = document.getElementById('bg-audio');
     var uploadInput = document.getElementById('music-upload-input');
+    var seekEl = document.getElementById('music-seek');
+    var volEl = document.getElementById('music-volume-bar');
+    var timeEl = document.getElementById('music-time');
     if(!audioEl) return;
 
     if(playBtn){
       playBtn.addEventListener('click', function(){
-        if(!audioEl.getAttribute('src')){ showToastSafe('ما فيه ملف موسيقى مرفوع بعد', 'err'); return; }
+        if(!audioEl.getAttribute('src')){ showToastSafe('ما فيه ملف صوت/فيديو مرفوع بعد', 'err'); return; }
         if(audioEl.paused){
-          audioEl.play().catch(function(){ showToastSafe('تعذّر تشغيل الموسيقى — انقر مرة ثانية', 'err'); });
+          audioEl.play().catch(function(){ showToastSafe('تعذّر تشغيل الملف — انقر مرة ثانية', 'err'); });
         } else {
           audioEl.pause();
         }
@@ -1095,8 +1135,38 @@
     audioEl.addEventListener('ended', function(){ setMusicPlayingUI(false); });
     audioEl.addEventListener('error', function(){
       setMusicPlayingUI(false);
-      if(audioEl.getAttribute('src')) showToastSafe('تعذّر تحميل ملف الموسيقى من الرابط المخزّن', 'err');
+      if(audioEl.getAttribute('src')) showToastSafe('تعذّر تحميل الملف من الرابط المخزّن', 'err');
     });
+
+    audioEl.addEventListener('loadedmetadata', function(){
+      if(seekEl) seekEl.max = audioEl.duration || 0;
+      if(timeEl) timeEl.textContent = fmtMusicTime(audioEl.currentTime) + ' / ' + fmtMusicTime(audioEl.duration);
+    });
+    audioEl.addEventListener('timeupdate', function(){
+      if(musicSeeking) return;
+      if(seekEl) seekEl.value = audioEl.currentTime;
+      if(timeEl) timeEl.textContent = fmtMusicTime(audioEl.currentTime) + ' / ' + fmtMusicTime(audioEl.duration);
+    });
+
+    if(seekEl){
+      seekEl.addEventListener('input', function(){
+        musicSeeking = true;
+        if(timeEl) timeEl.textContent = fmtMusicTime(parseFloat(seekEl.value)) + ' / ' + fmtMusicTime(audioEl.duration);
+      });
+      seekEl.addEventListener('change', function(){
+        audioEl.currentTime = parseFloat(seekEl.value);
+        musicSeeking = false;
+      });
+    }
+
+    if(volEl){
+      audioEl.volume = parseFloat(volEl.value);
+      volEl.addEventListener('input', function(){
+        audioEl.volume = parseFloat(volEl.value);
+        var icon = document.getElementById('music-vol-icon');
+        if(icon) icon.style.opacity = audioEl.volume === 0 ? '.4' : '1';
+      });
+    }
 
     if(uploadInput){
       uploadInput.addEventListener('change', function(e){
@@ -1163,7 +1233,7 @@
       var showAdmin = !!(state.session && state.session.isAdmin);
       adminArea.style.display = showAdmin ? 'flex' : 'none';
     }
-    if(uploadLabel && !musicUploadBusy) uploadLabel.textContent = url ? 'تغيير MP3' : 'رفع MP3';
+    if(uploadLabel && !musicUploadBusy) uploadLabel.textContent = url ? 'تغيير الملف' : 'رفع ملف';
   }
 
   // Rejects with an error after `ms` milliseconds so the upload flow can
@@ -1196,8 +1266,10 @@
 
     if(musicUploadBusy) return;
     if(!state.session || !state.session.isAdmin){ showToastSafe('هذا الإجراء للإدارة فقط', 'err'); return; }
+    // نقبل MP3 (صوت) أو MP4 (فيديو يُشغَّل كصوت فقط للزوار — عنصر <video> مخفي)
     var isMp3 = file.type === 'audio/mpeg' || file.type === 'audio/mp3' || /\.mp3$/i.test(file.name);
-    if(!isMp3){ showToastSafe('الملف لازم يكون MP3', 'err'); return; }
+    var isMp4 = file.type === 'video/mp4' || /\.mp4$/i.test(file.name);
+    if(!isMp3 && !isMp4){ showToastSafe('الملف لازم يكون MP3 أو MP4', 'err'); return; }
     if(file.size > MUSIC_MAX_FILE_MB * 1024 * 1024){ showToastSafe('حجم الملف كبير — الحد الأقصى ' + MUSIC_MAX_FILE_MB + 'MB', 'err'); return; }
     if(!SITE_SETTINGS_ENABLED){ showToastSafe('أنشئ جدول site_settings في Supabase أولاً (key text primary key, value text)', 'err'); return; }
     if(typeof sb === 'undefined' || !sb){ showToastSafe('الاتصال بقاعدة البيانات غير جاهز — أعد تحميل الصفحة', 'err'); return; }
@@ -1250,7 +1322,7 @@
       if(labelEl){
         labelEl.classList.remove('is-busy');
         var urlNow = state.siteSettings ? state.siteSettings[MUSIC_SETTING_KEY] : null;
-        labelEl.textContent = urlNow ? 'تغيير MP3' : 'رفع MP3';
+        labelEl.textContent = urlNow ? 'تغيير الملف' : 'رفع ملف';
       }
       if(inputEl) inputEl.disabled = false;
     }
