@@ -921,13 +921,16 @@
   var chatFilterQuery = '';
   var REACTIONS_ENABLED = true; // set to false if the "reactions" table hasn't been created yet in Supabase
   var SITE_SETTINGS_ENABLED = true; // set to false if the "site_settings" table hasn't been created yet in Supabase
-  // NOTE: the MP3 is no longer pushed to Supabase Storage (buckets/policies were
-  // exactly why uploads used to hang forever on "جار الرفع..."). Instead the file
-  // is converted to a Base64 data-URL in the browser and saved directly as the
-  // text `value` of this row in `site_settings`, so every visitor's page just
-  // fetches that one row and plays it immediately — nothing to configure, nothing to hang.
+  // The file itself goes to Supabase Storage; only the resulting public URL
+  // (a short string) is saved in `site_settings`, so every visitor's page just
+  // fetches that one row and plays it. Requires a bucket named MUSIC_BUCKET to
+  // exist and be PUBLIC, plus a storage.objects RLS policy allowing the
+  // anon role to INSERT/UPDATE into it (see notes with uploadMusicFile below) —
+  // this app has no real Supabase Auth session, so policies keyed on auth.uid()
+  // will never pass; they must allow the anon role explicitly.
   var MUSIC_SETTING_KEY = 'bg_music_url';
-  var MUSIC_MAX_FILE_MB = 15; // keep the data-URL (and the DB row) a reasonable size
+  var MUSIC_BUCKET = 'music'; // <-- change to match your actual bucket name
+  var MUSIC_MAX_FILE_MB = 15;
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function parseFlexibleDate(input){
@@ -1259,6 +1262,22 @@
     });
   }
 
+  // Uploads the real file to Supabase Storage (bucket = MUSIC_BUCKET), then
+  // stores only the small public URL string in site_settings. This needs, in
+  // your Supabase project:
+  //   1) Storage → a bucket named exactly like MUSIC_BUCKET, marked Public.
+  //   2) Storage → Policies → on storage.objects, a policy that allows the
+  //      `anon` role to INSERT (and UPDATE, since we upsert) for that bucket.
+  //      This app logs admins in through its own `accounts` table, not real
+  //      Supabase Auth, so every request hits Supabase as the anon role — a
+  //      policy that checks auth.uid() or auth.role() = 'authenticated' will
+  //      always be denied here. Example minimal policy (run in SQL editor):
+  //        create policy "anon can write music bucket"
+  //        on storage.objects for insert to anon
+  //        with check (bucket_id = 'music');
+  //        create policy "anon can update music bucket"
+  //        on storage.objects for update to anon
+  //        using (bucket_id = 'music');
   async function uploadMusicFile(file){
     var statusEl = document.getElementById('music-upload-status');
     var labelEl = document.getElementById('music-upload-label');
@@ -1280,21 +1299,37 @@
     if(statusEl){ statusEl.className = 'music-upload-status'; statusEl.textContent = ''; }
 
     try{
-      // 1) File -> Base64 data-URL, entirely in the browser.
-      var dataUrl = await withTimeout(readFileAsDataUrl(file), 20000, 'timeout-read');
+      // 1) Upload the real file to Storage. Fixed filename + upsert:true means
+      //    each new upload overwrites the previous one instead of piling up.
+      var ext = isMp3 ? 'mp3' : 'mp4';
+      var path = 'bg-music.' + ext;
+      var contentType = file.type || (isMp3 ? 'audio/mpeg' : 'video/mp4');
 
-      // 2) Save that data-URL directly as text in site_settings — this single
-      //    upsert is the only thing that has to succeed; every visitor's page
-      //    already polls/subscribes to this same table, so it plays instantly
-      //    for everyone with zero extra setup.
+      var upRes = await withTimeout(
+        sb.storage.from(MUSIC_BUCKET).upload(path, file, { upsert: true, contentType: contentType, cacheControl: '3600' }),
+        60000,
+        'timeout-upload'
+      );
+      if(upRes && upRes.error) throw upRes.error;
+
+      // 2) Turn the storage path into a public URL, with a cache-busting
+      //    query param so browsers/CDN don't keep serving the old cached file
+      //    under the same filename.
+      var pub = sb.storage.from(MUSIC_BUCKET).getPublicUrl(path);
+      var publicUrl = pub && pub.data && pub.data.publicUrl;
+      if(!publicUrl) throw new Error('تعذّر الحصول على رابط عام للملف بعد الرفع');
+      publicUrl += (publicUrl.indexOf('?') === -1 ? '?' : '&') + 'v=' + Date.now();
+
+      // 3) Save that URL (a short string, not the file) in site_settings —
+      //    every visitor's page already reads this row to know what to play.
       var setRes = await withTimeout(
-        sb.from('site_settings').upsert({ key: MUSIC_SETTING_KEY, value: dataUrl }, { onConflict: 'key' }),
+        sb.from('site_settings').upsert({ key: MUSIC_SETTING_KEY, value: publicUrl }, { onConflict: 'key' }),
         20000,
         'timeout-settings'
       );
       if(setRes && setRes.error) throw setRes.error;
 
-      state.siteSettings[MUSIC_SETTING_KEY] = dataUrl;
+      state.siteSettings[MUSIC_SETTING_KEY] = publicUrl;
       renderMusicBar();
       tryAutoplayMusic();
       if(statusEl){ statusEl.className = 'music-upload-status is-ok'; statusEl.textContent = 'تم الرفع ✓'; }
@@ -1304,18 +1339,22 @@
       console.error('music upload failed', e);
       var msg = 'فشل رفع الملف';
       var raw = (e && (e.message || e.error_description || e.statusCode || '')) + '';
-      if(e && e.message === 'timeout-read'){
-        msg = 'تعذّرت قراءة الملف من جهازك — جرّب ملفاً آخر';
+      if(e && e.message === 'timeout-upload'){
+        msg = 'انتهت مهلة الرفع — تأكد من الاتصال بالإنترنت وحاول مرة ثانية';
       } else if(e && e.message === 'timeout-settings'){
-        msg = 'انتهت مهلة الحفظ — تأكد من الاتصال بالإنترنت وحاول مرة ثانية';
-      } else if(/row-level security|permission|not authorized|403/i.test(raw)){
-        msg = 'صلاحيات Supabase تمنع الحفظ — فعّل سياسة RLS للسماح بالكتابة على جدول site_settings';
-      } else if(/too long|value too long|string data|payload too large/i.test(raw)){
-        msg = 'الملف كبير جداً على أن يُحفظ كنص — جرّب ملفاً أصغر';
+        msg = 'تم رفع الملف لكن فشل حفظ رابطه — أعد المحاولة';
+      } else if(/bucket not found/i.test(raw)){
+        msg = 'لا يوجد bucket باسم "' + MUSIC_BUCKET + '" في Supabase Storage — أنشئه أولاً';
+      } else if(/row-level security|permission|not authorized|403|unauthorized/i.test(raw)){
+        msg = 'صلاحيات Supabase تمنع الرفع — أضف policy تسمح لدور anon بالكتابة على bucket "' + MUSIC_BUCKET + '"';
+      } else if(/too large|payload too large|exceeded the maximum allowed size/i.test(raw)){
+        msg = 'الملف أكبر من الحد المسموح به في إعدادات الـ bucket';
       } else if(raw){
         msg = 'فشل رفع الملف: ' + raw;
       }
-      if(statusEl){ statusEl.className = 'music-upload-status is-err'; statusEl.textContent = ''; }
+      // نعرض سبب الفشل الفعلي في السطر الصغير بدل ما نتركه فاضي — عشان
+      // ما يبان الموضوع وكأنه "رجع للواجهة القديمة" من غير أي تفسير.
+      if(statusEl){ statusEl.className = 'music-upload-status is-err'; statusEl.textContent = msg; }
       showToastSafe(msg, 'err');
     }finally{
       musicUploadBusy = false;
