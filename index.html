@@ -1354,8 +1354,12 @@
       }
       // نعرض سبب الفشل الفعلي في السطر الصغير بدل ما نتركه فاضي — عشان
       // ما يبان الموضوع وكأنه "رجع للواجهة القديمة" من غير أي تفسير.
-      if(statusEl){ statusEl.className = 'music-upload-status is-err'; statusEl.textContent = msg; }
-      showToastSafe(msg, 'err');
+      // TEMP DEBUG: نلصق النص الخام الكامل اللي رجع من Supabase (statusCode +
+      // error + الرسالة) عشان نقدر نشخّص أي مشكلة صلاحيات بدقة. احذف هذا
+      // السطر لاحقاً بعد ما تحل المشكلة نهائياً.
+      var debugRaw = JSON.stringify({ message: e && e.message, error: e && e.error, statusCode: e && e.statusCode, name: e && e.name, cause: e && e.cause });
+      if(statusEl){ statusEl.className = 'music-upload-status is-err'; statusEl.textContent = msg + ' | DEBUG: ' + debugRaw; }
+      showToastSafe(msg + ' — تفاصيل: ' + debugRaw, 'err');
     }finally{
       musicUploadBusy = false;
       if(labelEl){
