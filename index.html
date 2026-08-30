@@ -436,6 +436,30 @@
   .audio-btn.playing .eq-bars{display:flex;}
   .audio-btn.playing{border-color:var(--gold);box-shadow:0 0 14px -4px rgba(177,178,173,.5);}
 
+  /* ===== bronze mini music player bar (top of page) ===== */
+  :root{ --music-bar-h:44px; }
+  header{top:var(--music-bar-h);}
+  .music-bar{position:sticky;top:0;z-index:70;height:var(--music-bar-h);
+    background:linear-gradient(135deg,#161512 0%,#2b2a24 35%,#6f6d63 60%,#b1b2ad 78%,#4c4a43 100%);
+    border-bottom:1px solid #8a7e5e;box-shadow:0 2px 10px rgba(0,0,0,.45);}
+  .music-bar-inner{max-width:1080px;margin:0 auto;height:100%;padding:0 16px;display:flex;align-items:center;gap:10px;}
+  .music-play-btn{flex:none;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #efe6c9, #b1852f 55%, #5c4416 100%);
+    border:1px solid #4c3a18;color:#241a08;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.5);}
+  .music-play-btn svg{width:13px;height:13px;fill:#241a08;}
+  .music-play-btn:hover{filter:brightness(1.1);}
+  .music-info{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.25;}
+  .music-title{font-family:var(--disp);font-size:13.5px;color:#efe6c9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .music-hint{font-family:var(--mono);font-size:10px;color:#d9cfa8;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .music-admin{flex:none;display:flex;align-items:center;gap:8px;}
+  .music-upload-btn{font-family:var(--mono);font-size:10.5px;color:#241a08;background:linear-gradient(180deg,#efe6c9,#b1852f);border:1px solid #4c3a18;border-radius:6px;padding:5px 9px;cursor:pointer;white-space:nowrap;}
+  .music-upload-btn:hover{filter:brightness(1.08);}
+  .music-upload-status{font-family:var(--mono);font-size:10px;color:#efe6c9;white-space:nowrap;}
+  @media (max-width:520px){
+    .music-title{font-size:12px;}
+    .music-hint{display:none;}
+    .music-upload-btn{padding:5px 7px;}
+  }
+
   /* categorized dropdown menu */
   .menu-panel{min-width:230px;padding:10px;transform-origin:top left;transform:scale(.96);opacity:0;pointer-events:none;transition:transform .18s ease, opacity .18s ease;
     backdrop-filter:blur(10px) saturate(130%);-webkit-backdrop-filter:blur(10px) saturate(130%);
@@ -463,8 +487,24 @@
 </svg>
 <canvas id="bg-grid"></canvas>
 <div class="toast-stack" id="toast-stack"></div>
-<!-- ضع ملف الموسيقى الخاص بالقروب في هذا المسار (مثلاً ارفعه إلى نفس مجلد الموقع على Netlify) -->
-<audio id="bg-audio" loop preload="none" src="audio/theme.mp3"></audio>
+<div class="music-bar" id="music-bar">
+  <div class="music-bar-inner">
+    <button class="music-play-btn" id="music-play-btn" aria-label="تشغيل الموسيقى" title="تشغيل/إيقاف الموسيقى">
+      <svg id="music-ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg id="music-ic-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+    </button>
+    <div class="music-info">
+      <span class="music-title" id="music-title">موسيقى القروب</span>
+      <span class="music-hint" id="music-hint">لا يوجد ملف موسيقى بعد</span>
+    </div>
+    <div class="music-admin" id="music-admin-area" style="display:none;">
+      <label class="music-upload-btn" for="music-upload-input" id="music-upload-label">رفع MP3</label>
+      <input type="file" id="music-upload-input" accept="audio/mpeg,audio/mp3,.mp3" style="display:none;">
+      <span class="music-upload-status" id="music-upload-status"></span>
+    </div>
+  </div>
+</div>
+<audio id="bg-audio" loop preload="none"></audio>
 
 <header>
   <div class="nav-wrap">
@@ -473,12 +513,6 @@
       CIA
     </div>
     <div class="nav-right">
-      <button class="icon-btn audio-btn" id="audio-btn" aria-label="تشغيل الموسيقى" title="تشغيل/إيقاف الموسيقى">
-        <span class="audio-ic">
-          <svg viewBox="0 0 24 24" class="note-ic"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
-          <span class="eq-bars"><span></span><span></span><span></span></span>
-        </span>
-      </button>
       <div class="menu-wrap" id="menu-wrap">
         <button class="icon-btn" id="menu-btn" aria-label="القائمة">☰</button>
         <div class="menu-panel" id="menu-panel">
@@ -771,10 +805,13 @@
   var ADMIN_CODE = "CIA-2026"; // كود دخول الإدارة — غيّره لكود خاص فيك
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [], tournaments: [], reactions: [] };
+  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [], tournaments: [], reactions: [], siteSettings: {} };
   var membersFilterQuery = '';
   var chatFilterQuery = '';
   var REACTIONS_ENABLED = true; // set to false if the "reactions" table hasn't been created yet in Supabase
+  var SITE_SETTINGS_ENABLED = true; // set to false if the "site_settings" table hasn't been created yet in Supabase
+  var MUSIC_STORAGE_BUCKET = 'music'; // Supabase Storage bucket used for the group's MP3 file
+  var MUSIC_SETTING_KEY = 'bg_music_url';
 
   function esc(s){ var d=document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function parseFlexibleDate(input){
@@ -892,6 +929,14 @@
       REACTIONS_ENABLED = true;
     }catch(e){ console.error('reactions load failed (create the "reactions" table in Supabase — see notes)', e); state.reactions = []; REACTIONS_ENABLED = false; }
 
+    try{
+      var { data: settingsRows, error: ssErr } = await sb.from('site_settings').select('*');
+      if(ssErr) throw ssErr;
+      state.siteSettings = {};
+      (settingsRows || []).forEach(function(row){ state.siteSettings[row.key] = row.value; });
+      SITE_SETTINGS_ENABLED = true;
+    }catch(e){ console.error('site_settings load failed (create the "site_settings" table in Supabase — key text primary key, value text)', e); state.siteSettings = {}; SITE_SETTINGS_ENABLED = false; }
+
     // refresh session with latest account data (rank/coins/avatar might have changed)
     if(state.session && state.session.accountId){
       var freshAcc = state.accounts.find(function(a){ return a.id === state.session.accountId; });
@@ -930,10 +975,132 @@
     renderStore();
     renderActivity();
     renderFeed();
+    renderMusicBar();
     updateNotifDots();
     document.getElementById('visit-count').textContent = state.visits;
     document.getElementById('member-count').textContent = state.members.length;
     updateOpsCount();
+  }
+
+  var musicAutoplayArmed = false;
+
+  function initMusicPlayer(){
+    var playBtn = document.getElementById('music-play-btn');
+    var audioEl = document.getElementById('bg-audio');
+    var uploadInput = document.getElementById('music-upload-input');
+    if(!audioEl) return;
+
+    if(playBtn){
+      playBtn.addEventListener('click', function(){
+        if(!audioEl.getAttribute('src')){ showToastSafe('ما فيه ملف موسيقى مرفوع بعد', 'err'); return; }
+        if(audioEl.paused){
+          audioEl.play().catch(function(){ showToastSafe('تعذّر تشغيل الموسيقى', 'err'); });
+        } else {
+          audioEl.pause();
+        }
+      });
+    }
+    audioEl.addEventListener('play', function(){ setMusicPlayingUI(true); });
+    audioEl.addEventListener('pause', function(){ setMusicPlayingUI(false); });
+    audioEl.addEventListener('ended', function(){ setMusicPlayingUI(false); });
+
+    if(uploadInput){
+      uploadInput.addEventListener('change', function(e){
+        var file = e.target.files && e.target.files[0];
+        if(file) uploadMusicFile(file);
+        uploadInput.value = '';
+      });
+    }
+
+    // Best-effort autoplay for every visitor: browsers block unmuted autoplay
+    // before any user interaction, so we try immediately, and — if blocked —
+    // start automatically on the visitor's very first click/tap/key on the page.
+    tryAutoplayMusic();
+    var armAutoplay = function(){
+      if(musicAutoplayArmed) return;
+      musicAutoplayArmed = true;
+      tryAutoplayMusic();
+    };
+    document.addEventListener('click', armAutoplay, { once: true });
+    document.addEventListener('keydown', armAutoplay, { once: true });
+    document.addEventListener('touchstart', armAutoplay, { once: true });
+  }
+
+  function tryAutoplayMusic(){
+    var audioEl = document.getElementById('bg-audio');
+    if(!audioEl || !audioEl.getAttribute('src')) return;
+    if(!audioEl.paused) return;
+    var p = audioEl.play();
+    if(p && p.catch) p.catch(function(){ /* blocked until the visitor interacts with the page */ });
+  }
+
+  function setMusicPlayingUI(isPlaying){
+    var playIc = document.getElementById('music-ic-play');
+    var pauseIc = document.getElementById('music-ic-pause');
+    var btn = document.getElementById('music-play-btn');
+    if(playIc) playIc.style.display = isPlaying ? 'none' : '';
+    if(pauseIc) pauseIc.style.display = isPlaying ? '' : 'none';
+    if(btn) btn.setAttribute('aria-label', isPlaying ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى');
+  }
+
+  function renderMusicBar(){
+    var audioEl = document.getElementById('bg-audio');
+    var titleEl = document.getElementById('music-title');
+    var hintEl = document.getElementById('music-hint');
+    var adminArea = document.getElementById('music-admin-area');
+    var uploadLabel = document.getElementById('music-upload-label');
+    var url = state.siteSettings ? state.siteSettings[MUSIC_SETTING_KEY] : null;
+
+    if(audioEl && url && audioEl.getAttribute('src') !== url){
+      var wasPlaying = !audioEl.paused;
+      audioEl.src = url;
+      if(wasPlaying) tryAutoplayMusic();
+    }
+
+    if(hintEl){
+      if(!SITE_SETTINGS_ENABLED) hintEl.textContent = 'أنشئ جدول site_settings في Supabase لتفعيل المشغل';
+      else if(!url) hintEl.textContent = 'لا يوجد ملف موسيقى بعد';
+      else hintEl.textContent = '';
+    }
+
+    if(adminArea){
+      var showAdmin = !!(state.session && state.session.isAdmin);
+      adminArea.style.display = showAdmin ? 'flex' : 'none';
+    }
+    if(uploadLabel) uploadLabel.textContent = url ? 'تغيير MP3' : 'رفع MP3';
+  }
+
+  async function uploadMusicFile(file){
+    var statusEl = document.getElementById('music-upload-status');
+    if(!state.session || !state.session.isAdmin){ showToastSafe('هذا الإجراء للإدارة فقط', 'err'); return; }
+    var isMp3 = file.type === 'audio/mpeg' || /\.mp3$/i.test(file.name);
+    if(!isMp3){ showToastSafe('الملف لازم يكون MP3', 'err'); return; }
+    if(file.size > 20 * 1024 * 1024){ showToastSafe('حجم الملف كبير — الحد الأقصى 20MB', 'err'); return; }
+    if(!SITE_SETTINGS_ENABLED){ showToastSafe('أنشئ جدول site_settings في Supabase أولاً (key text primary key, value text)', 'err'); return; }
+
+    if(statusEl) statusEl.textContent = 'جارِ الرفع...';
+    try{
+      var path = 'theme-' + Date.now() + '.mp3';
+      var { error: upErr } = await sb.storage.from(MUSIC_STORAGE_BUCKET).upload(path, file, { upsert: true, contentType: 'audio/mpeg' });
+      if(upErr) throw upErr;
+      var { data: pub } = sb.storage.from(MUSIC_STORAGE_BUCKET).getPublicUrl(path);
+      var publicUrl = pub && pub.publicUrl;
+      if(!publicUrl) throw new Error('تعذّر الحصول على رابط الملف');
+
+      var { error: setErr } = await sb.from('site_settings').upsert({ key: MUSIC_SETTING_KEY, value: publicUrl }, { onConflict: 'key' });
+      if(setErr) throw setErr;
+
+      state.siteSettings[MUSIC_SETTING_KEY] = publicUrl;
+      renderMusicBar();
+      tryAutoplayMusic();
+      if(statusEl) statusEl.textContent = 'تم الرفع ✓';
+      showToastSafe('تم رفع الموسيقى الجديدة، وتشتغل تلقائياً عند كل الزوار', 'ok');
+      setTimeout(function(){ if(statusEl) statusEl.textContent = ''; }, 4000);
+    }catch(e){
+      console.error('music upload failed', e);
+      if(statusEl) statusEl.textContent = '';
+      showToastSafe('فشل رفع الملف — تأكد من إنشاء Storage bucket باسم "music" بصلاحية عامة (public) في Supabase', 'err');
+    }
   }
 
   function updateOpsCount(){
@@ -1069,27 +1236,8 @@
       });
     }
 
-    // ---------- audio player (no autoplay; user-initiated only) ----------
-    var audioBtn = document.getElementById('audio-btn');
-    var audioEl = document.getElementById('bg-audio');
-    if(audioBtn && audioEl){
-      audioBtn.addEventListener('click', function(){
-        if(audioEl.paused){
-          audioEl.play().then(function(){
-            audioBtn.classList.add('playing');
-            audioBtn.setAttribute('aria-label', 'إيقاف الموسيقى');
-          }).catch(function(){
-            showToastSafe('تعذّر تشغيل الموسيقى — تأكد من رفع ملف الصوت لمسار audio/theme.mp3', 'err');
-          });
-        } else {
-          audioEl.pause();
-          audioBtn.classList.remove('playing');
-          audioBtn.setAttribute('aria-label', 'تشغيل الموسيقى');
-        }
-      });
-      audioEl.addEventListener('ended', function(){ audioBtn.classList.remove('playing'); });
-      audioEl.addEventListener('pause', function(){ audioBtn.classList.remove('playing'); });
-    }
+    // ---------- bronze music bar: playback + admin upload ----------
+    initMusicPlayer();
     function showToastSafe(text, kind){
       var stack = document.getElementById('toast-stack');
       if(!stack) return;
@@ -2265,6 +2413,16 @@
           state.joinRequests.push(row);
           renderJoinArea();
           if(state.session && state.session.isAdmin) showToast('طلب انضمام جديد من ' + esc(row.name), 'live');
+        })
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'site_settings' }, function(payload){
+          if(payload.eventType === 'DELETE'){
+            if(payload.old && state.siteSettings) delete state.siteSettings[payload.old.key];
+          } else {
+            var row = payload.new;
+            state.siteSettings[row.key] = row.value;
+            if(row.key === MUSIC_SETTING_KEY) showToast('الإدارة رفعت موسيقى جديدة للموقع 🎵', 'live');
+          }
+          renderMusicBar();
         })
         .subscribe(function(status){
           if(status === 'SUBSCRIBED') setConnStatus('up');
