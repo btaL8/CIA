@@ -918,6 +918,9 @@
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [], tournaments: [], reactions: [], siteSettings: {} };
   var membersFilterQuery = '';
+  var showToastSafe; // معرّفة هنا (نطاق عام بالسكربت) وتُسند لاحقاً — كانت
+  // قبل محصورة داخل IIFE ثاني فيسبب "Can't find variable: showToastSafe"
+  // عند استدعائها من uploadMusicFile رغم نجاح الرفع فعلياً.
   var chatFilterQuery = '';
   var REACTIONS_ENABLED = true; // set to false if the "reactions" table hasn't been created yet in Supabase
   var SITE_SETTINGS_ENABLED = true; // set to false if the "site_settings" table hasn't been created yet in Supabase
@@ -1354,12 +1357,8 @@
       }
       // نعرض سبب الفشل الفعلي في السطر الصغير بدل ما نتركه فاضي — عشان
       // ما يبان الموضوع وكأنه "رجع للواجهة القديمة" من غير أي تفسير.
-      // TEMP DEBUG: نلصق النص الخام الكامل اللي رجع من Supabase (statusCode +
-      // error + الرسالة) عشان نقدر نشخّص أي مشكلة صلاحيات بدقة. احذف هذا
-      // السطر لاحقاً بعد ما تحل المشكلة نهائياً.
-      var debugRaw = JSON.stringify({ message: e && e.message, error: e && e.error, statusCode: e && e.statusCode, name: e && e.name, cause: e && e.cause });
-      if(statusEl){ statusEl.className = 'music-upload-status is-err'; statusEl.textContent = msg + ' | DEBUG: ' + debugRaw; }
-      showToastSafe(msg + ' — تفاصيل: ' + debugRaw, 'err');
+      if(statusEl){ statusEl.className = 'music-upload-status is-err'; statusEl.textContent = msg; }
+      showToastSafe(msg, 'err');
     }finally{
       musicUploadBusy = false;
       if(labelEl){
@@ -1506,7 +1505,7 @@
 
     // ---------- bronze music bar: playback + admin upload ----------
     initMusicPlayer();
-    function showToastSafe(text, kind){
+    showToastSafe = function(text, kind){
       var stack = document.getElementById('toast-stack');
       if(!stack) return;
       var el = document.createElement('div');
