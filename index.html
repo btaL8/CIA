@@ -550,6 +550,64 @@
   .menu-item .mi-ic svg{width:16px;height:16px;stroke:url(#bronzeIconGrad) var(--bronze);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:filter .15s ease;filter:drop-shadow(0 0.5px 0.5px rgba(0,0,0,.55));}
   .menu-item:hover .mi-ic svg{filter:drop-shadow(0 0.5px 1px rgba(177,178,173,.45)) drop-shadow(0 0.5px 0.5px rgba(0,0,0,.55));}
   .menu-item:hover{background:rgba(198,198,194,0.06);}
+  /* ===== profile page ===== */
+  .profile-lookup{display:flex;gap:8px;margin-bottom:22px;}
+  .profile-lookup input{flex:1;}
+  .profile-head{display:flex;align-items:center;gap:16px;margin-bottom:18px;flex-wrap:wrap;}
+  .profile-avatar{width:76px;height:76px;border-radius:50%;object-fit:cover;border:1px solid var(--line);flex:none;background:var(--bg-panel-2);}
+  .profile-name{font-family:var(--disp);font-size:22px;color:var(--text);}
+  .profile-rank{font-family:var(--mono);font-size:11px;color:var(--text-dim);}
+  .profile-bio{font-size:13px;color:var(--text-dim);margin-top:4px;max-width:520px;}
+  .profile-stats{display:flex;gap:18px;margin-inline-start:auto;font-family:var(--mono);font-size:12px;color:var(--text-dim);}
+  .profile-stats b{color:var(--text);font-size:15px;display:block;font-family:var(--body);}
+  .profile-actions{display:flex;gap:10px;margin:14px 0 22px;flex-wrap:wrap;}
+  .profile-hl-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:6px;margin-bottom:22px;}
+  .profile-hl{flex:none;width:64px;text-align:center;cursor:pointer;}
+  .profile-hl-ring{width:60px;height:60px;border-radius:50%;border:1px solid var(--line);padding:2px;margin:0 auto 6px;}
+  .profile-hl-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;}
+  .profile-hl-title{font-size:10.5px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .profile-hl-add .profile-hl-ring{display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--text-dim);border-style:dashed;}
+  .profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+  .profile-post{position:relative;aspect-ratio:1/1;overflow:hidden;background:var(--bg-panel-2);border:1px solid var(--line);cursor:pointer;}
+  .profile-post img,.profile-post video{width:100%;height:100%;object-fit:cover;display:block;}
+  .profile-post .pp-vid-badge{position:absolute;top:6px;left:6px;font-size:10px;color:#fff;background:rgba(0,0,0,.55);border-radius:4px;padding:2px 5px;font-family:var(--mono);}
+  .profile-empty{color:var(--text-dim);font-size:13px;padding:30px 0;text-align:center;}
+
+  /* lightbox (shared: profile posts / highlights) */
+  .lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:20px;}
+  .lb-media{max-width:min(92vw,560px);max-height:70vh;border-radius:8px;border:1px solid var(--line);background:#000;}
+  .lb-caption{color:var(--text);font-size:13px;margin-top:14px;max-width:560px;text-align:center;}
+  .lb-close{position:absolute;top:16px;left:16px;width:36px;height:36px;border-radius:50%;background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);font-size:18px;cursor:pointer;}
+  .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);font-size:18px;cursor:pointer;}
+  .lb-nav.prev{right:16px;} .lb-nav.next{left:16px;}
+  .lb-del{margin-top:12px;}
+
+  /* ===== results log page (3D folders) ===== */
+  .results-crumbs{font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:16px;}
+  .results-crumbs a{color:var(--text);cursor:pointer;text-decoration:underline;}
+  .results-toolbar{display:flex;justify-content:flex-end;margin-bottom:18px;}
+  .folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:22px;perspective:900px;}
+  .folder-card{position:relative;cursor:pointer;padding:22px 14px 16px;text-align:center;
+    background:linear-gradient(160deg,var(--bg-panel-2),var(--bg-panel));border:1px solid var(--line);border-radius:10px;
+    transform-style:preserve-3d;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+    box-shadow:0 10px 0 -6px #0a0a0a,0 14px 22px -10px rgba(0,0,0,.7);}
+  .folder-card:hover{transform:rotateX(6deg) rotateY(-6deg) translateY(-4px);border-color:#3a3a3a;
+    box-shadow:0 10px 0 -6px #0a0a0a,0 22px 30px -12px rgba(0,0,0,.8);}
+  .folder-ic{font-size:34px;margin-bottom:10px;filter:grayscale(1) brightness(1.3);}
+  .folder-name{font-family:var(--body);font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;word-break:break-word;}
+  .folder-meta{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);}
+  .entry-card{background:var(--bg-panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:12px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .entry-score{font-family:var(--mono);font-size:16px;color:var(--text);white-space:nowrap;}
+  .entry-score b{font-size:19px;}
+  .entry-note{font-size:12px;color:var(--text-dim);flex:1 1 200px;}
+  .entry-meta{font-family:var(--mono);font-size:10px;color:var(--text-dim);white-space:nowrap;}
+  .entry-actions{display:flex;gap:6px;}
+  .entry-actions button{font-family:var(--mono);font-size:10.5px;background:var(--bg-panel-2);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:4px 8px;cursor:pointer;}
+  .entry-actions button:hover{border-color:#3a3a3a;}
+  .result-form input,.result-form textarea{margin-bottom:10px;}
+  .result-form .row2{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;}
+  .result-form .vs{font-family:var(--mono);color:var(--text-dim);text-align:center;}
 </style>
 </head>
 <body>
@@ -632,6 +690,8 @@
           <a class="menu-item" href="#terminal" id="menu-terminal-link" style="display:none;"><span class="mi-ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M7 9l3 2.5L7 14M12 14h5"/><path d="M9 20h6M12 17v3"/></svg></span>طرفية الأوامر</a>
 
           <div class="menu-section-label">حسابك</div>
+          <a class="menu-item" href="#profile"><span class="mi-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.4"/><path d="M5.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></svg></span>ملفي الشخصي</a>
+          <a class="menu-item" href="#results"><span class="mi-ic"><svg viewBox="0 0 24 24"><path d="M4 6a2 2 0 0 1 2-2h4l2 2h6a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg></span>سجل النتائج</a>
           <a class="menu-item" href="#store"><span class="mi-ic"><svg viewBox="0 0 24 24"><path d="M4 5h2l1.5 9.5A2 2 0 0 0 9.5 16h7a2 2 0 0 0 2-1.6L20 8H6.2"/><circle cx="10" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg></span>المتجر<span class="notif-dot" id="dot-store-tab"></span></a>
           <a class="menu-item" href="#login"><span class="mi-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M5.5 16c0-1.8 1.5-3 3-3s3 1.2 3 3M14 9h5M14 13h5"/></svg></span>الحساب<span class="notif-dot" id="dot-account-tab"></span></a>
         </div>
@@ -837,6 +897,28 @@
   </div>
 </section>
 
+<section id="profile">
+  <div class="container">
+    <p class="eyebrow">صفحة شخصية</p>
+    <h2>الملف الشخصي</h2>
+    <p class="lead">صفحة كل عضو المستقلة عن الرئيسية — ينشر فيها صوره ومقاطع يومياته ويسوي هايلايتس، وتظهر لكل زائر يفتحها.</p>
+    <div class="profile-lookup">
+      <input type="text" id="profile-lookup-input" placeholder="🔍 افتح ملف عضو بالاسم...">
+      <button class="btn" id="profile-lookup-btn">فتح</button>
+    </div>
+    <div id="profile-area"></div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="container">
+    <p class="eyebrow">أرشيف مستقل</p>
+    <h2>سجل النتائج</h2>
+    <p class="lead">افتح ملف إقصاء أو أي بطولة ودية وسجّل فيه نتائج مبارياتك — كل ملف مستقل بنتائجه الخاصة.</p>
+    <div id="results-area"></div>
+  </div>
+</section>
+
 <section id="terminal" style="display:none;">
   <div class="container">
     <p class="eyebrow">وحدة التحكم</p>
@@ -901,7 +983,10 @@
   var ADMIN_CODE = "CIA-2026"; // كود دخول الإدارة — غيّره لكود خاص فيك
 
   var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [], tournaments: [], reactions: [], siteSettings: {} };
+  var state = { session: null, members: [], opinions: [], joinRequests: [], visits: 0, matches: [], polls: [], pollVotes: [], chatMessages: [], accounts: [], storeItems: [], purchases: [], tournaments: [], reactions: [], siteSettings: {}, profilePosts: [], profileHighlights: [], resultFolders: [], resultEntries: [] };
+  var viewingResultsFolder = null; // ephemeral UI state, not persisted
+  var PROFILE_BUCKET = 'profile_media'; // <-- create this PUBLIC bucket in Supabase Storage (same anon-write policy notes as MUSIC_BUCKET below)
+  var PROFILE_MAX_FILE_MB = 20;
   var membersFilterQuery = '';
   var showToastSafe; // معرّفة هنا (نطاق عام بالسكربت) وتُسند لاحقاً — كانت
   // قبل محصورة داخل IIFE ثاني فيسبب "Can't find variable: showToastSafe"
@@ -1064,6 +1149,30 @@
       state.visits = newCount;
     }catch(e){ console.error('visits update failed', e); state.visits = '—'; }
 
+    try{
+      var { data: pp, error: ppErr } = await sb.from('profile_posts').select('*').order('created_at', { ascending: false }).limit(300);
+      if(ppErr) throw ppErr;
+      state.profilePosts = pp || [];
+    }catch(e){ console.error('profile_posts load failed (create table: id uuid pk default gen_random_uuid(), account_id uuid, username text, media_url text, media_type text, caption text, created_at timestamptz default now())', e); state.profilePosts = []; }
+
+    try{
+      var { data: ph, error: phErr } = await sb.from('profile_highlights').select('*').order('created_at', { ascending: false }).limit(200);
+      if(phErr) throw phErr;
+      state.profileHighlights = ph || [];
+    }catch(e){ console.error('profile_highlights load failed (create table: id uuid pk default gen_random_uuid(), account_id uuid, username text, title text, cover_url text, items jsonb, created_at timestamptz default now())', e); state.profileHighlights = []; }
+
+    try{
+      var { data: rf, error: rfErr } = await sb.from('result_folders').select('*').order('created_at', { ascending: false });
+      if(rfErr) throw rfErr;
+      state.resultFolders = rf || [];
+    }catch(e){ console.error('result_folders load failed (create table: id uuid pk default gen_random_uuid(), name text, created_by text, created_at timestamptz default now())', e); state.resultFolders = []; }
+
+    try{
+      var { data: re, error: reErr } = await sb.from('result_entries').select('*').order('created_at', { ascending: false }).limit(500);
+      if(reErr) throw reErr;
+      state.resultEntries = re || [];
+    }catch(e){ console.error('result_entries load failed (create table: id uuid pk default gen_random_uuid(), folder_id uuid, player1 text, score1 int, player2 text, score2 int, note text, created_by text, created_at timestamptz default now())', e); state.resultEntries = []; }
+
     renderAll();
     setInterval(refreshChat, 6000);
   }
@@ -1084,6 +1193,9 @@
     renderFeed();
     renderMusicBar();
     renderTerminalAccess();
+    wireProfileLookup();
+    renderProfile();
+    renderResults();
     updateNotifDots();
     document.getElementById('visit-count').textContent = state.visits;
     document.getElementById('member-count').textContent = state.members.length;
@@ -1099,6 +1211,390 @@
     // إذا كان الزائر فاتح القسم مباشرة عبر الرابط ثم فقد صلاحية الإدارة، رجّعه لأعلى الصفحة
     if(!isAdmin && location.hash === '#terminal') history.replaceState(null, '', location.pathname + location.search);
   }
+
+  // ============================================================
+  // صفحة الملف الشخصي — مستقلة عن الرئيسية، تصل لها عبر زر بالقائمة
+  // أو رابط مباشر #profile/username. تخزّن المنشورات والهايلايتس في
+  // Supabase Storage (bucket: PROFILE_BUCKET، لازم يكون Public + نفس
+  // ملاحظات صلاحيات anon الموجودة عند uploadMusicFile بالأسفل) وجداول
+  // profile_posts و profile_highlights (شكل الأعمدة بالتعليقات بـ init()).
+  // ============================================================
+  async function uploadProfileFile(file, prefix){
+    if(!file) throw new Error('لا يوجد ملف');
+    if(file.size > PROFILE_MAX_FILE_MB * 1024 * 1024) throw new Error('حجم الملف كبير — الحد الأقصى ' + PROFILE_MAX_FILE_MB + 'MB');
+    var extGuess = (file.name && file.name.indexOf('.') > -1) ? file.name.split('.').pop() : (file.type.indexOf('video') > -1 ? 'mp4' : 'jpg');
+    var path = prefix + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.' + extGuess.toLowerCase();
+    var upRes = await withTimeout(sb.storage.from(PROFILE_BUCKET).upload(path, file, { upsert: false, contentType: file.type || undefined, cacheControl: '3600' }), 60000, 'timeout-upload');
+    if(upRes && upRes.error) throw upRes.error;
+    var pub = sb.storage.from(PROFILE_BUCKET).getPublicUrl(path);
+    var url = pub && pub.data && pub.data.publicUrl;
+    if(!url) throw new Error('تعذّر الحصول على رابط عام للملف بعد الرفع');
+    return url;
+  }
+
+  function profileUploadErrorMessage(e){
+    var raw = (e && (e.message || e.error_description || '')) + '';
+    if(e && e.message === 'timeout-upload') return 'انتهت مهلة الرفع — تأكد من الاتصال وحاول مرة ثانية';
+    if(/bucket not found/i.test(raw)) return 'لا يوجد bucket باسم "' + PROFILE_BUCKET + '" في Supabase Storage — أنشئه أولاً (Public)';
+    if(/row-level security|permission|not authorized|403|unauthorized/i.test(raw)) return 'صلاحيات Supabase تمنع الرفع — أضف policy تسمح لدور anon بالكتابة على bucket "' + PROFILE_BUCKET + '"';
+    if(/relation .* does not exist/i.test(raw)) return 'أنشئ جداول profile_posts / profile_highlights بالـ Supabase أولاً';
+    return raw || 'صار خطأ غير متوقع';
+  }
+
+  function currentProfileTarget(){
+    var m = (location.hash || '').match(/^#profile\/(.+)$/);
+    if(m) return decodeURIComponent(m[1]);
+    return state.session ? state.session.name : null;
+  }
+
+  function renderProfile(){
+    var host = document.getElementById('profile-area');
+    if(!host) return;
+    var target = currentProfileTarget();
+
+    if(!target){
+      host.innerHTML = '<div class="profile-empty">سجّل دخولك من <a href="#login" style="color:var(--text);">الحساب</a> عشان تشوف ملفك، أو دوّر على ملف عضو فوق.</div>';
+      return;
+    }
+
+    var acc = state.accounts.find(function(a){ return a.username === target; });
+    var isOwn = !!(state.session && state.session.name === target);
+
+    if(!acc){
+      host.innerHTML = '<div class="profile-empty">ما فيه حساب باسم «' + esc(target) + '».</div>';
+      return;
+    }
+
+    var posts = state.profilePosts.filter(function(p){ return p.username === target; });
+    var highlights = state.profileHighlights.filter(function(h){ return h.username === target; });
+
+    var html = '';
+    html += '<div class="profile-head">';
+    html += acc.avatar
+      ? '<img class="profile-avatar" src="' + esc(acc.avatar) + '" alt="">'
+      : '<div class="profile-avatar" style="display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--text-dim);">' + esc(initials(acc.username)) + '</div>';
+    html += '<div><div class="profile-name">' + esc(acc.username) + '</div><div class="profile-rank">' + esc(acc.rank || 'عضو') + '</div></div>';
+    html += '<div class="profile-stats"><div><b>' + posts.length + '</b>منشور</div><div><b>' + highlights.length + '</b>هايلايت</div></div>';
+    html += '</div>';
+
+    if(isOwn){
+      html += '<div class="profile-actions">';
+      html += '<label class="btn primary" for="profile-post-input" style="cursor:pointer;">+ منشور جديد</label>';
+      html += '<input type="file" id="profile-post-input" accept="image/*,video/*" style="display:none;">';
+      html += '<span id="profile-post-status" style="font-family:var(--mono);font-size:11px;color:var(--text-dim);align-self:center;"></span>';
+      html += '</div>';
+    }
+
+    html += '<div class="profile-hl-row" id="profile-hl-row"></div>';
+    html += posts.length
+      ? '<div class="profile-grid" id="profile-grid"></div>'
+      : '<div class="profile-empty">ما فيه منشورات بعد.</div>';
+
+    host.innerHTML = html;
+
+    // highlights row
+    var hlRow = document.getElementById('profile-hl-row');
+    if(hlRow){
+      var hlHtml = '';
+      highlights.forEach(function(h, idx){
+        hlHtml += '<div class="profile-hl" data-hl-idx="' + idx + '"><div class="profile-hl-ring"><img src="' + esc(h.cover_url || (h.items && h.items[0] && h.items[0].url) || '') + '" alt=""></div><div class="profile-hl-title">' + esc(h.title || 'هايلايت') + '</div></div>';
+      });
+      if(isOwn){
+        hlHtml += '<div class="profile-hl profile-hl-add" id="profile-hl-add"><div class="profile-hl-ring">+</div><div class="profile-hl-title">جديد</div></div>';
+      }
+      hlRow.innerHTML = hlHtml;
+      hlRow.querySelectorAll('[data-hl-idx]').forEach(function(el){
+        el.addEventListener('click', function(){ openHighlightLightbox(highlights[parseInt(el.getAttribute('data-hl-idx'), 10)]); });
+      });
+      var addBtn = document.getElementById('profile-hl-add');
+      if(addBtn) addBtn.addEventListener('click', createHighlightFlow);
+    }
+
+    // posts grid
+    var grid = document.getElementById('profile-grid');
+    if(grid){
+      grid.innerHTML = posts.map(function(p, idx){
+        var inner = p.media_type === 'video'
+          ? '<video src="' + esc(p.media_url) + '" muted playsinline></video><span class="pp-vid-badge">▶</span>'
+          : '<img src="' + esc(p.media_url) + '" alt="">';
+        return '<div class="profile-post" data-post-idx="' + idx + '">' + inner + '</div>';
+      }).join('');
+      grid.querySelectorAll('[data-post-idx]').forEach(function(el){
+        el.addEventListener('click', function(){ openPostLightbox(posts, parseInt(el.getAttribute('data-post-idx'), 10)); });
+      });
+    }
+
+    if(isOwn){
+      var input = document.getElementById('profile-post-input');
+      if(input) input.addEventListener('change', function(){
+        if(input.files && input.files[0]) handleProfilePostUpload(input.files[0]);
+      });
+    }
+  }
+
+  var profilePostBusy = false;
+  async function handleProfilePostUpload(file){
+    if(profilePostBusy) return;
+    if(!state.session){ showToastSafe('سجّل الدخول أول', 'err'); return; }
+    var statusEl = document.getElementById('profile-post-status');
+    profilePostBusy = true;
+    if(statusEl) statusEl.textContent = 'جارِ الرفع...';
+    try{
+      var mediaType = file.type.indexOf('video') > -1 ? 'video' : 'image';
+      var url = await uploadProfileFile(file, 'posts/' + state.session.name);
+      var payload = { account_id: state.session.accountId, username: state.session.name, media_url: url, media_type: mediaType, caption: '' };
+      var { data, error } = await sb.from('profile_posts').insert(payload).select().single();
+      if(error) throw error;
+      state.profilePosts.unshift(data);
+      renderProfile();
+      showToastSafe('تم نشر المنشور', 'ok');
+    }catch(e){
+      console.error('profile post upload failed', e);
+      showToastSafe(profileUploadErrorMessage(e), 'err');
+    }finally{
+      profilePostBusy = false;
+      if(statusEl) statusEl.textContent = '';
+    }
+  }
+
+  async function createHighlightFlow(){
+    if(!state.session) return;
+    var title = prompt('اسم الهايلايت:');
+    if(title === null) return;
+    var input = document.createElement('input');
+    input.type = 'file'; input.accept = 'image/*,video/*'; input.multiple = true;
+    input.addEventListener('change', async function(){
+      var files = Array.prototype.slice.call(input.files || []);
+      if(!files.length) return;
+      showToastSafe('جارِ رفع الهايلايت...', 'live');
+      try{
+        var items = [];
+        for(var i = 0; i < files.length; i++){
+          var f = files[i];
+          var url = await uploadProfileFile(f, 'highlights/' + state.session.name);
+          items.push({ url: url, type: f.type.indexOf('video') > -1 ? 'video' : 'image' });
+        }
+        var payload = { account_id: state.session.accountId, username: state.session.name, title: title || 'هايلايت', cover_url: items[0].url, items: items };
+        var { data, error } = await sb.from('profile_highlights').insert(payload).select().single();
+        if(error) throw error;
+        state.profileHighlights.unshift(data);
+        renderProfile();
+        showToastSafe('تم إنشاء الهايلايت', 'ok');
+      }catch(e){
+        console.error('highlight create failed', e);
+        showToastSafe(profileUploadErrorMessage(e), 'err');
+      }
+    });
+    input.click();
+  }
+
+  function openHighlightLightbox(hl){
+    if(!hl || !hl.items || !hl.items.length) return;
+    openLightbox(hl.items.map(function(it){ return { media_url: it.url, media_type: it.type, caption: '' }; }), 0, null);
+  }
+
+  function openPostLightbox(posts, idx){
+    openLightbox(posts, idx, function(item){
+      return state.session && (state.session.name === item.username || state.session.isAdmin);
+    });
+  }
+
+  function openLightbox(items, idx, canDelete){
+    var overlay = document.createElement('div');
+    overlay.className = 'lb-overlay';
+    function render(){
+      var it = items[idx];
+      var mediaHtml = it.media_type === 'video'
+        ? '<video class="lb-media" src="' + esc(it.media_url) + '" controls autoplay playsinline></video>'
+        : '<img class="lb-media" src="' + esc(it.media_url) + '" alt="">';
+      var showDel = canDelete && it.id && canDelete(it);
+      overlay.innerHTML =
+        '<button class="lb-close" id="lb-close">✕</button>' +
+        (items.length > 1 ? '<button class="lb-nav prev" id="lb-prev">›</button><button class="lb-nav next" id="lb-next">‹</button>' : '') +
+        mediaHtml +
+        (it.caption ? '<div class="lb-caption">' + esc(it.caption) + '</div>' : '') +
+        (showDel ? '<button class="btn lb-del" id="lb-del">حذف المنشور</button>' : '');
+      document.getElementById('lb-close').addEventListener('click', function(){ overlay.remove(); });
+      if(items.length > 1){
+        document.getElementById('lb-prev').addEventListener('click', function(){ idx = (idx + 1) % items.length; render(); });
+        document.getElementById('lb-next').addEventListener('click', function(){ idx = (idx - 1 + items.length) % items.length; render(); });
+      }
+      if(showDel){
+        document.getElementById('lb-del').addEventListener('click', async function(){
+          if(!confirm('حذف هذا المنشور نهائياً؟')) return;
+          try{
+            var { error } = await sb.from('profile_posts').delete().eq('id', it.id);
+            if(error) throw error;
+            state.profilePosts = state.profilePosts.filter(function(p){ return p.id !== it.id; });
+            overlay.remove();
+            renderProfile();
+            showToastSafe('تم الحذف', 'ok');
+          }catch(e){ console.error('post delete failed', e); showToastSafe('فشل الحذف', 'err'); }
+        });
+      }
+    }
+    overlay.addEventListener('click', function(e){ if(e.target === overlay) overlay.remove(); });
+    render();
+    document.body.appendChild(overlay);
+  }
+
+  var profileLookupWired = false;
+  function wireProfileLookup(){
+    if(profileLookupWired) return;
+    var btn = document.getElementById('profile-lookup-btn');
+    var input = document.getElementById('profile-lookup-input');
+    if(!btn || !input) return;
+    profileLookupWired = true;
+    function go(){
+      var v = (input.value || '').trim();
+      if(!v) return;
+      location.hash = '#profile/' + encodeURIComponent(v);
+      renderProfile();
+    }
+    btn.addEventListener('click', go);
+    input.addEventListener('keydown', function(e){ if(e.key === 'Enter') go(); });
+  }
+
+  // ============================================================
+  // سجل النتائج — صفحة مستقلة، ملفات (فولدرات) كل فولدر يحوي نتائج
+  // مباريات بين شخصين. جداول result_folders و result_entries (شكل
+  // الأعمدة بالتعليقات بـ init()).
+  // ============================================================
+  function renderResults(){
+    var host = document.getElementById('results-area');
+    if(!host) return;
+
+    var folder = viewingResultsFolder ? state.resultFolders.find(function(f){ return f.id === viewingResultsFolder; }) : null;
+
+    if(!folder){
+      var html = '<div class="results-toolbar">' + (state.session ? '<button class="btn primary" id="results-new-folder">+ إنشاء ملف جديد</button>' : '') + '</div>';
+      if(!state.resultFolders.length){
+        html += '<div class="profile-empty">ما فيه ملفات نتائج بعد.</div>';
+      }else{
+        html += '<div class="folder-grid">';
+        state.resultFolders.forEach(function(f){
+          var count = state.resultEntries.filter(function(e){ return e.folder_id === f.id; }).length;
+          html += '<div class="folder-card" data-folder-id="' + esc(f.id) + '"><div class="folder-ic">🗂️</div><div class="folder-name">' + esc(f.name) + '</div><div class="folder-meta">' + count + ' نتيجة</div></div>';
+        });
+        html += '</div>';
+      }
+      host.innerHTML = html;
+      host.querySelectorAll('[data-folder-id]').forEach(function(el){
+        el.addEventListener('click', function(){ viewingResultsFolder = el.getAttribute('data-folder-id'); renderResults(); });
+      });
+      var newBtn = document.getElementById('results-new-folder');
+      if(newBtn) newBtn.addEventListener('click', createResultsFolder);
+      return;
+    }
+
+    var entries = state.resultEntries.filter(function(e){ return e.folder_id === folder.id; });
+    var html = '<div class="results-crumbs"><a id="results-back">سجل النتائج</a> › ' + esc(folder.name) + '</div>';
+    html += '<div class="results-toolbar">' + (state.session ? '<button class="btn primary" id="results-new-entry">+ إضافة نتيجة</button>' : '') + '</div>';
+    html += '<div id="results-entry-form-area"></div>';
+    html += entries.length ? '<div id="results-entries-list"></div>' : '<div class="profile-empty">ما فيه نتائج بهذا الملف بعد.</div>';
+    host.innerHTML = html;
+
+    document.getElementById('results-back').addEventListener('click', function(){ viewingResultsFolder = null; renderResults(); });
+    var newEntryBtn = document.getElementById('results-new-entry');
+    if(newEntryBtn) newEntryBtn.addEventListener('click', function(){ showResultEntryForm(folder.id, null); });
+
+    var list = document.getElementById('results-entries-list');
+    if(list){
+      list.innerHTML = entries.map(function(e){
+        var canEdit = state.session && (state.session.name === e.created_by || state.session.isAdmin);
+        var when = e.created_at ? new Date(e.created_at).toLocaleDateString('ar') : '';
+        return '<div class="entry-card" data-entry-id="' + esc(e.id) + '">' +
+          '<div class="entry-score">' + esc(e.player1) + ' <b>' + e.score1 + '</b> : <b>' + e.score2 + '</b> ' + esc(e.player2) + '</div>' +
+          (e.note ? '<div class="entry-note">' + esc(e.note) + '</div>' : '<div class="entry-note"></div>') +
+          '<div class="entry-meta">' + esc(e.created_by || '') + (when ? ' · ' + when : '') + '</div>' +
+          (canEdit ? '<div class="entry-actions"><button data-edit="' + esc(e.id) + '">تعديل</button><button data-del="' + esc(e.id) + '">حذف</button></div>' : '') +
+          '</div>';
+      }).join('');
+      list.querySelectorAll('[data-edit]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var entry = entries.find(function(e){ return e.id === btn.getAttribute('data-edit'); });
+          showResultEntryForm(folder.id, entry);
+        });
+      });
+      list.querySelectorAll('[data-del]').forEach(function(btn){
+        btn.addEventListener('click', async function(){
+          if(!confirm('حذف هذه النتيجة؟')) return;
+          try{
+            var { error } = await sb.from('result_entries').delete().eq('id', btn.getAttribute('data-del'));
+            if(error) throw error;
+            state.resultEntries = state.resultEntries.filter(function(e){ return e.id !== btn.getAttribute('data-del'); });
+            renderResults();
+            showToastSafe('تم الحذف', 'ok');
+          }catch(e){ console.error('entry delete failed', e); showToastSafe('فشل الحذف', 'err'); }
+        });
+      });
+    }
+  }
+
+  async function createResultsFolder(){
+    if(!state.session) return;
+    var name = prompt('اسم الملف (مثال: إقصاء الموسم 1، بلياردو الأصدقاء):');
+    if(!name) return;
+    try{
+      var { data, error } = await sb.from('result_folders').insert({ name: name, created_by: state.session.name }).select().single();
+      if(error) throw error;
+      state.resultFolders.unshift(data);
+      viewingResultsFolder = data.id;
+      renderResults();
+      showToastSafe('تم إنشاء الملف', 'ok');
+    }catch(e){ console.error('folder create failed', e); showToastSafe('فشل إنشاء الملف — تأكد من وجود جدول result_folders', 'err'); }
+  }
+
+  function showResultEntryForm(folderId, existing){
+    var host = document.getElementById('results-entry-form-area');
+    if(!host) return;
+    host.innerHTML =
+      '<div class="panel result-form">' +
+      '<div class="row2">' +
+      '<input type="text" id="re-p1" placeholder="اسم اللاعب 1" value="' + esc(existing ? existing.player1 : '') + '">' +
+      '<span class="vs">ضد</span>' +
+      '<input type="text" id="re-p2" placeholder="اسم اللاعب 2" value="' + esc(existing ? existing.player2 : '') + '">' +
+      '</div>' +
+      '<div class="row2">' +
+      '<input type="number" id="re-s1" placeholder="النتيجة" value="' + (existing ? existing.score1 : '') + '">' +
+      '<span class="vs">:</span>' +
+      '<input type="number" id="re-s2" placeholder="النتيجة" value="' + (existing ? existing.score2 : '') + '">' +
+      '</div>' +
+      '<textarea id="re-note" rows="2" placeholder="ملاحظة (اختياري)">' + esc(existing ? (existing.note || '') : '') + '</textarea>' +
+      '<button class="btn primary" id="re-save">' + (existing ? 'حفظ التعديل' : 'حفظ النتيجة') + '</button>' +
+      ' <button class="btn" id="re-cancel">إلغاء</button>' +
+      '</div>';
+    document.getElementById('re-cancel').addEventListener('click', function(){ host.innerHTML = ''; });
+    document.getElementById('re-save').addEventListener('click', async function(){
+      var p1 = document.getElementById('re-p1').value.trim();
+      var p2 = document.getElementById('re-p2').value.trim();
+      var s1 = parseInt(document.getElementById('re-s1').value, 10);
+      var s2 = parseInt(document.getElementById('re-s2').value, 10);
+      var note = document.getElementById('re-note').value.trim();
+      if(!p1 || !p2 || isNaN(s1) || isNaN(s2)){ showToastSafe('عبّي الأسماء والنتايج كاملة', 'err'); return; }
+      try{
+        if(existing){
+          var { error } = await sb.from('result_entries').update({ player1: p1, player2: p2, score1: s1, score2: s2, note: note }).eq('id', existing.id);
+          if(error) throw error;
+          var idx = state.resultEntries.findIndex(function(e){ return e.id === existing.id; });
+          if(idx > -1) state.resultEntries[idx] = Object.assign({}, state.resultEntries[idx], { player1: p1, player2: p2, score1: s1, score2: s2, note: note });
+        }else{
+          var payload = { folder_id: folderId, player1: p1, player2: p2, score1: s1, score2: s2, note: note, created_by: state.session.name };
+          var res = await sb.from('result_entries').insert(payload).select().single();
+          if(res.error) throw res.error;
+          state.resultEntries.unshift(res.data);
+        }
+        host.innerHTML = '';
+        renderResults();
+        showToastSafe('تم الحفظ', 'ok');
+      }catch(e){ console.error('entry save failed', e); showToastSafe('فشل الحفظ — تأكد من وجود جدول result_entries', 'err'); }
+    });
+  }
+
+  window.addEventListener('hashchange', function(){
+    if(/^#profile\/?/.test(location.hash)) renderProfile();
+    if(location.hash === '#results') { viewingResultsFolder = null; renderResults(); }
+  });
 
   var musicAutoplayArmed = false;
 
